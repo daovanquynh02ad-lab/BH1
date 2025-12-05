@@ -3,218 +3,392 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Биохимия (Полная база 2019)</title>
+    <title>Биохимия (PRO Тренажер)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg: #F9F9F9; --card-bg: #FFFFFF; --text-primary: #111111; --text-secondary: #555555;
-            --accent: #007AFF; --accent-light: #F0F8FF; --success: #34C759; --success-light: #F0FFF4;
-            --error: #FF3B30; --error-light: #FFF0F0; --border: #E5E5E5;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08); --font: 'Inter', sans-serif;
+            --bg: #F9F9F9;
+            --card-bg: #FFFFFF;
+            --text-primary: #111111;
+            --text-secondary: #555555;
+            --accent: #5E5CE6; /* ВОЗВРАЩЕН ОРИГИНАЛЬНЫЙ ЦВЕТ */
+            --accent-light: #F5F5FF;
+            --success: #34C759;
+            --success-light: #F0FFF4;
+            --error: #FF3B30;
+            --error-light: #FFF0F0;
+            --border: #E5E5E5;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
+
         [data-theme="dark"] {
-            --bg: #000000; --card-bg: #1C1C1E; --text-primary: #FFFFFF; --text-secondary: #8D8D93;
-            --accent: #0A84FF; --accent-light: #18222d; --success: #30D158; --success-light: #132d18;
-            --error: #FF453A; --error-light: #2d1313; --border: #3A3A3C;
+            --bg: #000000;
+            --card-bg: #1C1C1E;
+            --text-primary: #FFFFFF;
+            --text-secondary: #8D8D93;
+            --accent: #6C63FF;
+            --accent-light: #2C2C2E;
+            --success: #30D158;
+            --success-light: #2C2C2E;
+            --error: #FF453A;
+            --error-light: #2C2C2E;
+            --border: #3A3A3C;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
         }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: var(--font); background: var(--bg); color: var(--text-primary); padding-bottom: 100px; touch-action: manipulation; }
-        .container { max-width: 640px; margin: 0 auto; padding: 20px; }
-        .screen { display: none; animation: fadeIn 0.3s ease-out; }
-        .screen.active { display: block; }
-        h1 { font-size: 1.8rem; margin-bottom: 10px; font-weight: 800; }
-        .btn { display: flex; align-items: center; justify-content: center; width: 100%; padding: 16px; border-radius: 14px; font-weight: 600; cursor: pointer; border: none; font-size: 1rem; margin-bottom: 10px; transition: 0.2s; }
-        .btn-primary { background: var(--accent); color: white; }
-        .btn-outline { background: var(--card-bg); border: 2px solid var(--border); color: var(--text-primary); }
-        .card { background: var(--card-bg); padding: 20px; border-radius: 20px; box-shadow: var(--shadow); margin-bottom: 20px; border: 1px solid var(--border); }
-        .topic-choice { display: flex; align-items: center; padding: 12px; border-bottom: 1px solid var(--border); cursor: pointer; }
-        .topic-choice input { transform: scale(1.3); margin-right: 15px; accent-color: var(--accent); }
-        .option { background: var(--bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; cursor: pointer; border: 2px solid transparent; display: flex; gap: 10px; }
-        .option.selected { border-color: var(--accent); background: var(--accent-light); }
-        .option.correct { border-color: var(--success); background: var(--success-light); }
-        .option.incorrect { border-color: var(--error); background: var(--error-light); }
-        .footer { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg); padding: 15px; border-top: 1px solid var(--border); display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 10px; max-width: 640px; margin: 0 auto; }
-        .stat-val { font-size: 2rem; font-weight: 800; } .correct-val { color: var(--success); } .error-val { color: var(--error); }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        html, body {
+            font-family: var(--font);
+            background-color: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        .container {
+            max-width: 640px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px 20px 140px 20px;
+        }
+
+        .screen {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            flex: 1;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .screen.active { display: flex; }
+        
+        .start-header { margin: 20px 0 30px 0; text-align: center; }
+        .start-header h1 { font-size: 2.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 10px; }
+        .start-header p { font-size: 1.1rem; color: var(--text-secondary); line-height: 1.6; }
+        
+        .topic-selector {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .topic-selector h3 { font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 15px; padding-left: 10px; }
+        .topic-list { display: flex; flex-direction: column; gap: 5px; }
+        .topic-choice {
+            display: flex; align-items: center; padding: 12px 10px; border-radius: 8px; cursor: pointer;
+            transition: background-color 0.2s; font-weight: 500; font-size: 0.95rem;
+        }
+        .topic-choice:hover { background-color: var(--bg); }
+        .topic-choice input { transform: scale(1.2); margin-right: 12px; accent-color: var(--accent); }
+        .topic-choice span { color: var(--text-secondary); font-size: 0.9rem; margin-left: auto; }
+        
+        .select-all-btn {
+            background: none; border: none; color: var(--accent); font-weight: 600; cursor: pointer;
+            padding: 10px; font-size: 0.9rem; width: 100%;
+        }
+
+        .start-controls { display: flex; flex-direction: column; gap: 12px; }
+        .menu-btn {
+            padding: 16px; border: 2px solid var(--border); border-radius: 12px; font-size: 1rem; font-weight: 500;
+            cursor: pointer; background: var(--card-bg); color: var(--text-primary); text-align: left;
+            display: flex; align-items: center; gap: 12px; transition: all 0.2s;
+        }
+        .menu-btn:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow); }
+        .menu-btn.primary { background: var(--accent); color: white; border-color: var(--accent); font-weight: 700; }
+        .menu-btn.primary:hover { background-color: var(--accent); border-color: var(--accent); opacity: 0.9; }
+        .menu-btn i { width: 20px; text-align: center; }
+
+        .top-settings { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .theme-toggle {
+            background: var(--card-bg); border: 2px solid var(--border); color: var(--text-secondary);
+            font-size: 1rem; cursor: pointer; border-radius: 50%; width: 40px; height: 40px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        
+        .progress-pill {
+            background: var(--card-bg); padding: 6px 14px; border-radius: 20px; font-size: 0.9rem;
+            font-weight: 600; border: 1px solid var(--border); color: var(--text-secondary);
+        }
+
+        .quiz-card {
+            background: var(--card-bg); border-radius: 20px; box-shadow: var(--shadow); padding: 25px;
+            width: 100%; border: 1px solid var(--border); margin-top: 20px;
+        }
+        .q-id { font-size: 1rem; font-weight: 700; color: var(--accent); margin-bottom: 8px; }
+        .q-title { font-size: 1.3rem; font-weight: 700; line-height: 1.4; margin-bottom: 30px; color: var(--text-primary); }
+        
+        .options-list { display: flex; flex-direction: column; gap: 12px; }
+        .option {
+            background: var(--bg); border: 2px solid var(--bg); padding: 16px; border-radius: 12px; cursor: pointer;
+            font-size: 1rem; font-weight: 500; line-height: 1.4; transition: all 0.2s; display: flex; align-items: center; gap: 15px;
+        }
+        .option:hover:not(.disabled) { border-color: var(--accent); }
+        
+        .option-marker {
+            width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--border); flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center; transition: 0.2s;
+        }
+        .option-marker i { font-size: 12px; color: white; opacity: 0; }
+
+        .option.selected:not(.disabled) { border-color: var(--accent); background: var(--accent-light); }
+        .option.selected:not(.disabled) .option-marker { background: var(--accent); border-color: var(--accent); }
+        .option.selected:not(.disabled) .option-marker i { opacity: 1; }
+
+        .option.correct { background: var(--success-light); border-color: var(--success); }
+        .option.correct .option-marker { background: var(--success); border-color: var(--success); }
+        .option.correct .option-marker i { opacity: 1; content: '\f00c'; font-family: "Font Awesome 6 Free"; font-weight: 900; }
+        
+        .option.incorrect { background: var(--error-light); border-color: var(--error); }
+        .option.incorrect .option-marker { background: var(--error); border-color: var(--error); }
+        .option.incorrect .option-marker i { opacity: 1; content: '\f00d'; font-family: "Font Awesome 6 Free"; font-weight: 900; }
+
+        .quiz-footer {
+            position: fixed; bottom: 0; left: 0; right: 0; padding: 20px;
+            background: linear-gradient(180deg, rgba(255,255,255,0) 0%, var(--card-bg) 30%);
+            border-top: 1px solid var(--border); z-index: 100;
+        }
+        [data-theme="dark"] .quiz-footer { background: linear-gradient(180deg, rgba(0,0,0,0) 0%, var(--card-bg) 30%); }
+
+        .controls { display: grid; grid-template-columns: 50px 1fr 50px 50px; gap: 10px; }
+        .nav-btn {
+            height: 50px; border-radius: 12px; border: 1px solid var(--border); cursor: pointer; font-size: 1.2rem;
+            display: flex; align-items: center; justify-content: center; background: var(--card-bg); color: var(--text-primary); box-shadow: var(--shadow);
+        }
+        .action-btn {
+            height: 50px; border-radius: 12px; border: none; cursor: pointer; font-weight: 700; font-size: 1rem; color: white;
+            background: var(--accent); box-shadow: var(--shadow);
+        }
+        .action-btn:disabled { background: var(--text-secondary); opacity: 0.5; box-shadow: none; }
+        .action-btn.correct { background: var(--success); }
+        .action-btn.incorrect { background: var(--error); }
+
+        .stat-box { background: var(--card-bg); border: 1px solid var(--border); padding: 15px; border-radius: 12px; text-align: center; box-shadow: var(--shadow); }
+        .stat-val { font-size: 1.8rem; font-weight: 700; }
+        .stat-val.correct { color: var(--success); }
+        .stat-val.error { color: var(--error); }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
-<div class="container">
-    <div id="start-screen" class="screen active">
-        <h1>Биохимия: Экзамен</h1>
-        <p style="color:var(--text-secondary); margin-bottom: 20px;">Полная база вопросов 2019 (584 вопроса).</p>
-        <div class="card" id="topic-list"></div>
-        <button class="btn btn-outline" onclick="toggleSelectAll()">Выбрать все / Снять</button>
-        <button class="btn btn-primary" onclick="startQuiz('new')"><i class="fas fa-play"></i>&nbsp; Начать тест</button>
-        <button class="btn btn-outline" onclick="startQuiz('shuffle')"><i class="fas fa-random"></i>&nbsp; Случайный порядок</button>
-        <button class="btn btn-primary" id="mistakes-btn" style="display:none;" onclick="startQuiz('mistakes')">Работа над ошибками</button>
+
+    <div class="container">
+        <div id="start-screen" class="screen active">
+            <div class="top-settings">
+                <span></span>
+                <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+            </div>
+            <div class="start-header">
+                <h1>Биохимия: Экзамен</h1>
+                <p>База: 584 вопроса (Аминокислоты, Ферменты, Витамины, Гормоны).</p>
+            </div>
+            
+            <div class="topic-selector">
+                <h3>Выберите разделы:</h3>
+                <div class="topic-list" id="topic-list"></div>
+                <button class="select-all-btn" onclick="toggleSelectAll(this)">Снять выделение</button>
+            </div>
+            
+            <div class="start-controls">
+                <div id="resume-block" style="display:none; width: 100%;">
+                    <button class="menu-btn primary" onclick="startQuiz('resume')">
+                        <i class="fas fa-play"></i>
+                        <div>
+                            <div>Продолжить</div>
+                            <div style="font-size: 0.8rem; font-weight: 400; opacity: 0.8;">С места остановки</div>
+                        </div>
+                    </button>
+                </div>
+                <button class="menu-btn" onclick="startQuiz('new')"><i class="fas fa-redo"></i> &nbsp; Начать (по порядку)</button>
+                <button class="menu-btn" onclick="startQuiz('shuffle')"><i class="fas fa-random"></i> &nbsp; Случайный порядок</button>
+                <button class="menu-btn primary" id="mistakes-btn-start" style="display:none;" onclick="startQuiz('mistakes')"><i class="fas fa-bug"></i> &nbsp; Работа над ошибками</button>
+            </div>
+        </div>
+
+        <div id="quiz-screen" class="screen">
+            <div class="top-settings">
+                <div class="progress-pill" id="progress-pill">1 / 100</div>
+                <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+            </div>
+
+            <div class="quiz-card" id="question-card">
+                <div class="q-id" id="q-id-display">Раздел</div>
+                <div class="q-title" id="q-text">Загрузка...</div>
+                <div class="options-list" id="options-list"></div>
+            </div>
+        </div>
+
+        <div id="result-screen" class="screen">
+             <div class="start-header" style="margin:0;">
+                <h1 id="result-title">Тест завершен!</h1>
+                <p id="result-subtitle" style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-top: 10px;">Результат: <span id="final-score">0%</span></p>
+            </div>
+            <div class="result-stats" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; margin: 30px 0;">
+                <div class="stat-box">
+                    <div class="stat-val correct" id="correct-val">0</div>
+                    <div class="stat-label">Верно</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-val error" id="error-val">0</div>
+                    <div class="stat-label">Ошибки</div>
+                </div>
+            </div>
+            <div class="start-controls" style="margin-top: 20px;">
+                 <button class="menu-btn primary" id="mistakes-btn-end" onclick="startQuiz('mistakes')" style="display:none"><i class="fas fa-bug"></i> &nbsp; Работа над ошибками</button>
+                <button class="menu-btn" onclick="goHome()"><i class="fas fa-home"></i> &nbsp; В главное меню</button>
+            </div>
+        </div>
     </div>
 
-    <div id="quiz-screen" class="screen">
-        <div style="display:flex; justify-content:space-between; margin-bottom:15px; color:var(--text-secondary); font-weight:600;">
-            <span id="progress-text">1 / 100</span>
-            <span id="topic-name">...</span>
+    <div class="quiz-footer" id="quiz-footer" style="display: none;">
+        <div class="container" style="padding: 0;">
+             <div class="controls">
+                <button class="nav-btn" id="prev-btn" onclick="prevQ()"><i class="fas fa-chevron-left"></i></button>
+                <button class="action-btn" id="main-btn" onclick="handleMainClick()">Ответить</button>
+                <button class="nav-btn" id="next-btn" onclick="nextQ()"><i class="fas fa-chevron-right"></i></button>
+                <button class="nav-btn" id="home-btn" onclick="goHome()"><i class="fas fa-home"></i></button>
+            </div>
         </div>
-        <div class="card">
-            <h3 id="q-text" style="font-size:1.2rem; line-height:1.4;">...</h3>
-        </div>
-        <div id="options-list"></div>
     </div>
-
-    <div id="result-screen" class="screen" style="text-align:center;">
-        <h1>Результат</h1>
-        <div style="font-size:3rem; font-weight:800; color:var(--accent); margin:20px 0;" id="final-score">0%</div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:30px;">
-            <div class="card"><div class="stat-val correct-val" id="res-correct">0</div><small>Верно</small></div>
-            <div class="card"><div class="stat-val error-val" id="res-error">0</div><small>Ошибки</small></div>
-        </div>
-        <button class="btn btn-primary" onclick="location.reload()">Меню</button>
-    </div>
-</div>
-
-<div class="footer" id="footer" style="display:none;">
-    <button class="btn btn-outline" style="margin:0" onclick="prevQ()"><i class="fas fa-chevron-left"></i></button>
-    <button class="btn btn-primary" style="margin:0" id="action-btn" onclick="handleAction()">Ответить</button>
-    <button class="btn btn-outline" style="margin:0" onclick="nextQ()"><i class="fas fa-chevron-right"></i></button>
-</div>
 
 <script>
-// --- БАЗА ДАННЫХ (Часть 1) ---
-// Ответы: А=0, Б=1, В=2, Г=3
 const topicData = {
     s1: {
         name: "1. Аминокислоты (1-128)",
         questions: [
-            {q:"1. Укажите серосодержащую аминокислоту.",opts:["Серин","Аланин","Метионин","Пролин"],correct:[2]},
-            {q:"2. Укажите отрицательно заряженную аминокислоту.",opts:["Серин","Аспарагиновая кислота","Метионин","Пролин"],correct:[1]},
-            {q:"3. Укажите серосодержащую аминокислоту.",opts:["Серин","Аланин","Цистеин","Пролин"],correct:[2]},
-            {q:"4. Укажите отрицательно заряженную аминокислоту.",opts:["Лизин","Глутаминовая кислота","Метионин","Пролин"],correct:[1]},
-            {q:"5. Укажите аминокислоту, содержащую гидроксильную группу.",opts:["Метионин","Триптофан","Цистеин","Треонин"],correct:[3]},
-            {q:"6. Укажите положительно заряженную аминокислоту.",opts:["Цистеин","Триптофан","Аргинин","Треонин"],correct:[2]},
-            {q:"7. Укажите ароматическую аминокислоту.",opts:["Пролин","Триптофан","Аргинин","Треонин"],correct:[1]},
-            {q:"8. Укажите положительно заряженную аминокислоту.",opts:["Цистеин","Триптофан","Лизин","Треонин"],correct:[2]},
-            {q:"9. Выберите аминокислоту с аминогруппой в радикале.",opts:["Лизин","Пролин","Аспарагиновая кислота","Глутамин"],correct:[0]},
-            {q:"10. Выберите аминокислоту с ароматическим радикалом.",opts:["Тирозин","Лизин","Пролин","Изолейцин"],correct:[0]},
-            {q:"11. Выберите аминокислоту с наиболее гидрофобным радикалом.",opts:["Фенилаланин","Пролин","Гистидин","Тирозин"],correct:[0]},
-            {q:"12. Выберите аминокислоту с наиболее гидрофильным радикалом.",opts:["Лизин","Тирозин","Лейцин","Пролин"],correct:[0]},
-            {q:"13. Выберите аминокислоту, имеющую амидную группу в у-положении.",opts:["Аспарагиновая кислота","Аспарагин","Глутаминовая кислота","Глутамин"],correct:[3]},
-            {q:"14. Какая аминокислота является гетероциклической?",opts:["Тирозин","Фенилаланин","Триптофан","Треонин"],correct:[2]},
-            {q:"15. В состав какой аминокислоты входит гидроксильная группа?",opts:["Лейцин","Треонин","Гистидин","Изолейцин"],correct:[1]},
-            {q:"16. Выберите аминокислоту, содержащую полярный незаряженный радикал.",opts:["Аспарагиновая кислота","Аспарагин","Лизин","Гистидин"],correct:[1]},
-            {q:"17. Выберите аминокислоту с амидной группой.",opts:["Гистидин","Глутамин","Аспарагиновая кислота","Аргинин"],correct:[1]},
-            {q:"18. Выберите аминокислоту, которая является как полярной так и гидрофобной, и радикал которой имеет шестичленный цикл.",opts:["Триптофан","Фенилаланин","Пролин","Тирозин"],correct:[3]},
-            {q:"19. Какая аминокислота содержит индольное кольцо?",opts:["Тирозин","Гистидин","Триптофан","Пролин"],correct:[2]},
-            {q:"20. Какая аминокислота содержит гуанидиновую группу?",opts:["Тирозин","Гистидин","Триптофан","Аргинин"],correct:[3]},
-            {q:"21. Радикал какой аминокислоты обладает гидрофобными свойствами?",opts:["Пролин","Глутамин","Глутаминовая кислота","Серин"],correct:[0]},
-            {q:"22. Выберите аминокислоту производное янтарной кислоты.",opts:["Аспарагиновая кислота","Аргинин","Аланин","Пролин"],correct:[0]},
-            {q:"23. Выберите аминокислоту производное пропионовой кислоты.",opts:["Метионин","Треонин","Глутаминовая кислота","Серин"],correct:[3]},
-            {q:"24. Выберите аминокислоту производное масляной кислоты.",opts:["Глутаминовая кислота","Лизин","Треонин","Серин"],correct:[1]},
-            {q:"25. Какая аминокислота является производным уксусной кислоты?",opts:["Глицин","Аланин","Валин","Пролин"],correct:[0]},
-            {q:"26. Какая аминокислота может участвовать в образовании ионной связи в белках?",opts:["Тирозин","Аргинин","Серин","Изолейцин"],correct:[1]},
-            {q:"27. Какая аминокислота может участвовать в образовании ионной связи в белках?",opts:["Пролин","Глутамин","Аспарагиновая кислота","Валин"],correct:[2]},
-            {q:"28. Выберите аминокислоту с наибольшим значением Rf.",opts:["Валин","Глицин","Аспарагиновая кислота","Аспарагин"],correct:[0]},
-            {q:"29. Методом ионообменной хроматографии можно легко разделить пару аминокислот.",opts:["Асп и Глу","Глу и Лей","Лей и Вал","Лиз и Гис"],correct:[1]},
-            {q:"30. Методом ионообменной хроматографии можно разделить пару аминокислот.",opts:["Лиз и Гли","Вал и Про","Глн и Сер","Лиз и Гис"],correct:[0]},
-            {q:"31. Какие группы могут быть в радикалах гидрофобных аминокислот (валин, лейцин, изолейцин)?",opts:["Неполярные незаряженные группы","Полярные незаряженные группы","Основные группы","Кислые группы"],correct:[0]},
-            {q:"32. Какая из перечисленных аминокислот имеет отрицательный заряд при рН 7,4?",opts:["Глутаминовая кислота","Аспарагин","Гистидин","Лизин"],correct:[0]},
-            {q:"33. Какая аминокислота обладает положительным зарядом при рН 7,4?",opts:["Пролин","Глицин","Лизин","Цистеин"],correct:[2]},
-            {q:"34. Какая аминокислота обладает отрицательным зарядом при рН 7,4?",opts:["Серин","Триптофан","Аспарагиновая кислота","Гистидин"],correct:[2]},
-            {q:"35. Какую конфигурацию имеют аминокислоты, входящие в состав белков человека (кроме глицина)?",opts:["D-конфигурацию","L-конфигурацию","Либо Д-, либо L-конфигурацию","Не имеют энантиомеров"],correct:[1]},
-            {q:"36. Наименьшая величина Rf при использовании метода бумажной хроматографии характерна для какой аминокислоты?",opts:["Валина","Аспарагиновой кислоты","Изолейцина","Аланина"],correct:[1]},
-            {q:"37. Что относится к характерным физико-химическим свойствам белка?",opts:["Амфотерность","Сохранение структуры при нагревании","Неспособность к кристаллизации","Неспособность вращать плоскость поляризации света"],correct:[0]},
-            {q:"38. При формировании какой белковой структуры проявляются нативные биологические свойства мономерных белков?",opts:["Первичной структуры","Вторичной структуры","Третичной структуры","Четвертичной структуры"],correct:[2]},
-            {q:"39. Укажите, какой характеристикой обладает белок в изоэлектрической точке.",opts:["Обладает наибольшей степенью ионизации","Имеет наименьшую растворимость","Денатурирован","Несёт положительный заряд"],correct:[1]},
-            {q:"40. От чего зависит изоэлектрическая точка белка?",opts:["От суммарного заряда белка","От наличия водородных связей","От наличия ароматических аминокислотных остатков","От наличия серосодержащих аминокислотных остатков"],correct:[0]},
-            {q:"41. Выберите характеристику молекул белка в изоэлектрической точке.",opts:["Не диссоциируют","Движутся к катоду","Движутся к аноду","Электронейтральны"],correct:[3]},
-            {q:"42. Что такое изоэлектрическая точка белка?",opts:["Значение температуры замерзания воды...","Значение рН, оптимальное для действия фермента","Значение температуры, оптимальной для действия ферментов","Значение рН, при котором суммарный заряд белка равен нулю"],correct:[3]},
-            {q:"43. Изоэлектрическая точка белка равна 8,2. Какие аминокислоты преобладают в его составе?",opts:["Диаминомонокарбоновые","Моноаминодикарбоновые","Моноаминокарбоновые","Серосодержащие"],correct:[0]},
-            {q:"44. Что служит движущей силой в формировании вторичной структуры белка?",opts:["Электростатическое отталкивание","Образование водородных связей","Гидрофобные взаимодействия","Высокая вязкость раствора белка"],correct:[1]},
-            {q:"45. Каким образом организм человека получает незаменимые аминокислоты при белковом голодании?",opts:["Синтезируя их из углеводов","Синтезируя их из азотистых оснований","Расщепляя собственные белки","Синтезируя их из витаминов"],correct:[2]},
-            {q:"46. К какому классу белков относятся иммуноглобулины?",opts:["Липопротеины","Гликопротеины","Нуклеопротеины","Фосфопротеины"],correct:[1]},
-            {q:"47. Укажите особенность первичной структуры кислых белков.",opts:["Преобладание дикарбоновых аминокислот","Равное соотношение диамино и дикарбоновых аминокислот","Преобладание диаминомонокарбоновых аминокислот","Отсутствие диамино или дикарбоновых аминокислот"],correct:[0]},
-            {q:"48. Как называется отдельная полипептидная цепь, входящая в состав четвертичной структуры белка?",opts:["Протомер","Домен","Глобулин","Пептид"],correct:[0]},
-            {q:"49. Что является простетической группой гемоглобина?",opts:["Протопорфирин, соединённый с ионом железа","Протопорфирин","Порфобилиноген","Ион железа"],correct:[0]},
-            {q:"50. Что такое фолдинг белка?",opts:["Расщепление на пептиды","Присоединение к лиганду","Сворачивание полипептидной цепи в трёхмерную структуру","Ковалентная модификация белка после трансляции"],correct:[2]},
-            {q:"51. Сколько полипептидных цепей в молекуле инсулина?",opts:["1","2","3","4"],correct:[1]},
-            {q:"52. Сколько дисульфидных связей в молекуле инсулина?",opts:["1","2","3","4"],correct:[2]},
-            {q:"53. Укажите белок, имеющий красную окраску.",opts:["Коллаген","Овальбумин","Кератин","Цитохром с"],correct:[3]},
-            {q:"54. Какое соединение может служить аллостерическим эффектором гемоглобина?",opts:["NO2","CO","CO2","NO"],correct:[2]},
-            {q:"55. При поражении какой органа наблюдается альбуминурия?",opts:["Печени","Почек","Поджелудочной железы","Селезёнки"],correct:[1]},
-            {q:"56. Выберите верную характеристку фетального гемоглобина.",opts:["Имеет большее сродство к кислороду, чем гемоглобин взрослого человека","Состоит из двух субъединиц","Составляет около 50% от общего содержания гемоглобина","Не связывает кислород"],correct:[0]},
-            {q:"57. Какими связями в молекуле белка стабилизируются b-складчатые слои?",opts:["Водородными","Ковалентными","Ионными","Пептидными"],correct:[0]},
-            {q:"58. В какой органелле деградирует большая часть внутриклеточных белков?",opts:["Ядре","Митохондрии","Аппарате Гольджи","Протеасоме"],correct:[3]},
-            {q:"59. Выберите характеристику биологически устойчивых олигопептидов.",opts:["Образуются в организме человека прицельным протеолизом","Синтезируются в организме человека из отдельных аминокислот","Быстро разрушаются пептидазами","Не образуются в организме человека"],correct:[1]},
-            {q:"60. Выберите устойчивый к действию пептидаз дипептид.",opts:["Гистидил-b-аланин","Цистеинилглицин","Аланилфенилаланин","Глицилглицин"],correct:[0]},
-            {q:"61. Какие функциональные группы будут входить в состав аминокислотных радикалов полипептида, положительно заряженного при физиологическом рН?",opts:["Кислотные группы","Ароматические группы","Алифатические группы","Основные группы"],correct:[3]},
-            {q:"62. При формировании какой пространственной структуры образуется водородная связь между отдельными субъединицами белка?",opts:["Первичной структуры","Вторичной структуры","Третичной структуры","Четвертичной структуры"],correct:[3]},
-            {q:"63. Выберите положительно заряженные белки.",opts:["Альбумины","Глобулины","Глютелины","Гистоны"],correct:[3]},
-            {q:"64. Какие полипептидные цепи содержит фетальный гемоглобин человека?",opts:["Только a","a и b","a и y","Только y"],correct:[2]},
-            {q:"65. Какие белки являются ядерными?",opts:["Альбумины","Глобулины","Протамины","Проламины"],correct:[2]},
-            {q:"66. Какой пептид образуется путём прицельного протеолиза из белкового предшественника?",opts:["Глутатион","Карнозин","Ансерин","Ангиотензин II"],correct:[3]},
-            {q:"67. Какой метод используют для концентрирования белков?",opts:["Электрофорез","Аффинную хроматографию","Ионообменную хроматографию","Ультрафильтрацию"],correct:[3]},
-            {q:"68. Какие сложные белки содержат N-ацетилнейраминовую кислоту?",opts:["Хромопротеины","Гликопротеины","Липопротеины","Нуклеопротеины"],correct:[1]},
-            {q:"69. К какому классу сложных белков относится цитохром с?",opts:["Липопротеин","Нуклеопротеин","Хромопротеин","Фосфопротеин"],correct:[2]},
-            {q:"70. На каком уровне формирования структуры белка происходит образование доменов?",opts:["Первичной структуры","Вторичной структуры","Третичной структуры","Четвертичной структуры"],correct:[2]},
-            {q:"71. Укажите аминокислоту, остатки которой связывают гем гемоглобина с белком.",opts:["Аланин","Тирозин","Фенилаланин","Гистидин"],correct:[3]},
-            {q:"72. Какие радикалы аминокислот на поверхности молекулы повышают растворимость белка?",opts:["Про, Тир, Фен","Мет, Иле, Лей","Трп, Про, Гли","Сер, Тре, Асп"],correct:[3]},
-            {q:"73. Какой фактор вызывает обратимое осаждение белков сыворотки крови?",opts:["Кипячение","Раствор сульфата меди","Органические кислоты","Насыщенный раствор сульфата аммония"],correct:[3]},
-            {q:"74. К какому классу сложных белков относятся y-глобулины?",opts:["Липопротеины","Гликопротеины","Нуклеопротеины","Флавопротеины"],correct:[1]},
-            {q:"75. Какой фактор обеспечивает устойчивость белков в растворах?",opts:["Большое содержание аланина в белке","Гидрофобные радикалы аминокислот","Низкое содержание серина и лизина в белке","Гидратная оболочка и заряд молекул"],correct:[3]},
-            {q:"76. Выберите белки, содержащие более 70% углеводов.",opts:["Фосфопротеины","Протеогликаны","Гемопротеины","Гликопротеины"],correct:[1]},
-            {q:"77. Какую функцию выполняют липопротеины плазмы крови?",opts:["Терморегуляторную","Защитную","Энергетическую","Транспортную"],correct:[3]},
-            {q:"78. Что является простетической группой цитохромов?",opts:["Ион цинка","Гем","Нуклеиновая кислота","Фосфорная кислота"],correct:[1]},
-            {q:"79. Остатки какой аминокислоты образуют дисульфидные связи в белках?",opts:["Тирозина","Цистеина","Метионина","Триптофана"],correct:[1]},
-            {q:"80. С какими аминокислотными остатками могут связываться ионы ртути?",opts:["Фенилаланина","Аспарагиновой кислоты","Лизина","Цистеина"],correct:[1]}, /* В ключе Б (Асп), хотя ртуть вяжется с SH (Цис). Оставляю по ключу 80-Б */
-            {q:"81. Какое соединение может вызвать «высаливание» белков?",opts:["Трихлоруксусная кислота","Соляная кислота","Ацетон","Сульфат аммония"],correct:[3]},
-            {q:"82. Наличием какого аминокислотного остатка обусловлены участки деспирализации в структуре белка?",opts:["Тирозина","Лизина","Валина","Пролина"],correct:[3]},
-            {q:"83. Через какие аминокислотные остатки белков связываются углеводные остатки с помощью О-гликозидных связей?",opts:["Лизина","Аргинина","Валина","Треонина"],correct:[3]},
-            {q:"84. К чему приводит связывание апобелков с углеводным компонентом?",opts:["Снижает их стабильность","Повышает их стабильность","Приводит к выпадению белка в осадок","Снижает их гидрофильность"],correct:[1]},
-            {q:"85. Какой фермент относится к классу гемопротеинов?",opts:["Пепсин","Каталаза","Щелочная фосфатаза","Липаза"],correct:[1]},
-            {q:"86. Выберите биологически активный пептид, содержащий пептидную связь, устойчивую к действию протеаз.",opts:["Глутатион","Ангиотензин","Тиролиберин","Окситоцин"],correct:[0]},
-            {q:"87. Какова валентность железа в гемоглобине А (HbA)?",opts:["Всегда 2","Всегда 3","Может быть 2 или 3","Меняется при связывании кислорода"],correct:[0]},
-            {q:"88. Из производных какого гетероцикла состоит молекула гема?",opts:["Пиррола","Пурина","Пиримидина","Имидазола"],correct:[0]},
-            {q:"89. Выберите неокрашенный белок.",opts:["Амилаза","Каталаза","Миоглобин","Гемоглобин"],correct:[0]},
-            {q:"90. Выберите простетическую группу гликопротеинов.",opts:["Галактоза","Глицерин","Глутаминовая кислота","Нуклеиновая кислота"],correct:[0]},
-            {q:"91. Выберите пептид, образующийся путём ферментативного биосинтеза из аминокислот.",opts:["Вазопрессин","Окситоцин","Кальцитонин","Глутатион"],correct:[3]},
-            {q:"92. С какой биохимической патологией связана серповидно-клеточная анемия?",opts:["С изменением первичной структуры a-цепей","С изменением первичной структуры b-цепей","С недостаточно интенсивным синтезом a-цепей","С недостаточно интенсивным синтезом b-цепей"],correct:[1]},
-            {q:"93. Определите суммарный заряд трипептида Глу-Лиз-Про в водном растворе при нейтральном рН.",opts:["Нейтральный (0)","Положительный","Отрицательный","Зависит от концентрации"],correct:[0]},
-            {q:"94. Определите суммарный заряд трипептида Асп-Лиз-Про в водном растворе при нейтральном рН.",opts:["Нейтральный (0)","Положительный","Отрицательный","Зависит от концентрации"],correct:[0]},
-            {q:"95. Определите суммарный заряд трипептида Глн-Лиз-Про в водном растворе при нейтральном рН.",opts:["Нейтральный","Положительный","Отрицательный","Зависит от концентрации"],correct:[1]},
-            {q:"96. Определите суммарный заряд трипептида Асн-Лиз-Про в водном растворе при нейтральном рН.",opts:["Нейтральный","Положительный","Отрицательный","Зависит от концентрации"],correct:[1]},
-            {q:"97. Определите суммарный заряд трипептида Вал-Арг-Иле в водном растворе при нейтральном рН.",opts:["Нейтральный","Положительный","Отрицательный","Зависит от концентрации"],correct:[1]},
-            {q:"98. Определите суммарный заряд трипептида Вал-Гис-Иле в водном растворе при нейтральном рН.",opts:["Нейтральный","Положительный","Отрицательный","Зависит от концентрации"],correct:[1]}, /* Ключ Б */
-            {q:"99. Определите суммарный заряд трипептида Сер-Вал-Асн в водном растворе при нейтральном рН.",opts:["Нейтральный","Положительный","Отрицательный","Зависит от концентрации"],correct:[0]},
-            {q:"100. Определите суммарный заряд трипептида Тир-Иле-Глу в водном растворе при нейтральном рН.",opts:["Нейтральный","Положительный","Отрицательный","Зависит от концентрации"],correct:[2]},
-            {q:"101. Определите суммарный заряд трипептида Тре-Ала-Тир в водном растворе при нейтральном рН.",opts:["Нейтральный","Положительный","Отрицательный","Зависит от концентрации"],correct:[0]},
-            {q:"102. Определите суммарный заряд трипептида Лиз-Гис-Иле в водном растворе при нейтральном рН.",opts:["+1","+2","0","-1"],correct:[1]},
-            {q:"103. Определите суммарный заряд трипептида Гис-Асп-Лей в водном растворе при нейтральном рН.",opts:["-1","-2","0","+1"],correct:[2]},
-            {q:"104. Определите суммарный заряд трипептида Тре-Асп-Тир в водном растворе при нейтральном рН.",opts:["-1","-2","0","+1"],correct:[0]},
-            {q:"105. Определите суммарный заряд трипептида Тре-Глу-Ала в водном растворе при нейтральном рН.",opts:["-1","-2","0","+1"],correct:[0]},
-            {q:"106. Определите суммарный заряд трипептида Лиз-Глу-Про в водном растворе при нейтральном рН.",opts:["+1","+2","0","-1"],correct:[2]},
-            {q:"107. Определите суммарный заряд трипептида Тре-Асн-Цис в водном растворе при нейтральном рН.",opts:["-1","-2","0","+1"],correct:[2]},
-            {q:"108. Определите суммарный заряд трипептида Тре-Глн-Ала в водном растворе при нейтральном рН.",opts:["-1","-2","0","+1"],correct:[2]},
-            {q:"109. Определите суммарный заряд трипептида Тре-Арг-Гис в водном растворе при нейтральном рН.",opts:["+1","+2","0","-1"],correct:[1]},
-            {q:"110. Определите суммарный заряд трипептида Вал-Лиз-Про в водном растворе при нейтральном рН.",opts:["-1","-2","0","+1"],correct:[3]},
-            {q:"111. Определите суммарный заряд трипептида Гис-Асп-Глн в водном растворе при нейтральном рН.",opts:["-1","-2","0","+1"],correct:[2]},
-            {q:"112. Определите суммарный заряд трипептида Гис-Глу-Асн в водном растворе при нейтральном рН.",opts:["+1","+2","0","-1"],correct:[2]}, /* Ключ В (0). Гис+, Глу-, концевые +-. Итого 0 */
-            {q:"113. Укажите незаменимую аминокислоту.",opts:["Серин","Аспарагин","Пролин","Изолейцин"],correct:[3]},
-            {q:"114. Укажите незаменимую аминокислоту.",opts:["Пролин","Серин","Валин","Глутаминовая кислота"],correct:[2]},
-            {q:"115. Укажите незаменимую аминокислоту.",opts:["Цистеин","Серин","Аспарагин","Лейцин"],correct:[3]},
-            {q:"116. Укажите незаменимую аминокислоту.",opts:["Глутаминовая кислота","Фенилаланин","Аспарагиновая кислота","Глицин"],correct:[1]},
-            {q:"117. Укажите незаменимую аминокислоту.",opts:["Триптофан","Тирозин","Аспарагин","Пролин"],correct:[0]},
-            {q:"118. Укажите незаменимую аминокислоту.",opts:["Цистеин","Метионин","Глутамин","Аланин"],correct:[1]},
-            {q:"119. Укажите незаменимую аминокислоту.",opts:["Аланин","Серин","Лизин","Цистеин"],correct:[2]},
-            {q:"120. Укажите незаменимую аминокислоту.",opts:["Треонин","Цистеин","Глутамин","Серин"],correct:[0]},
-            {q:"121. Выберите верное утверждение.",opts:["Домен белка - элемент третичной структуры... фолдинг независимо...","Домен - элемент вторичной...","Домен - элемент третичной... внутри мембраны","Домен - элемент четвертичной..."],correct:[0]},
-            {q:"122. Какие из радикалов аминокислот могут образовывать ионные связи при формировании пространственной структуры белка?",opts:["Гли, Глу, Глн","Асп, Глу, Лиз","Сер, Цис, Про","Асп, Асн, Ала"],correct:[1]},
-            {q:"123. Какие из радикалов аминокислот могут участвовать в гидрофобных взаимодействиях в пространственной структуре белка?",opts:["Гли, Ала, Иле","Про, Трп, Арг","Ала, Вал, Про","Лей, Иле, Гис"],correct:[2]},
-            {q:"124. Какие радикалы аминокислотных остатков в пространственной структуре белка способны к гидрофобным взаимодействиям?",opts:["Радикалы, содержащие заряженные группы","Радикалы, способные к ионизации","Полярные радикалы","Неполярные радикалы"],correct:[3]},
-            {q:"125. Какие из перечисленных радикалов аминокислот могут участвовать в формировании псевдопептидных связей?",opts:["Лиз, Арг, Цис","Асн, Глн, Лиз","Глу, Глн, Асн","Глу, Асп, Арг"],correct:[3]}, /* Ключ Г (Глу, Асп, Арг) */
-            {q:"126. Какие из перечисленных радикалов аминокислот могут участвовать в формировании псевдопептидных связей?",opts:["Содержащие гидроксильную группу","Содержащие амидную группу","Содержащие карбоксильную группу","Радикалы ароматических аминокислот"],correct:[2]},
-            {q:"127. Выберите верное утверждение.",opts:["Радикалы... в цис-положении...","Средняя длина пептидной связи меньше, чем длина одинарной С-N...","Все атомы... в одной плоскости...","Пептидная связь имеет переходящие..."],correct:[1]},
-            {q:"128. Выберите верное утверждение.",opts:["Пептидная связь имеет частичный характер двойной связи (планарность)...","Средняя длина... меньше, чем длина двойной...","Все атомы... в одной плоскости... цис-положение","Пептидная связь имеет переходящие..."],correct:[0]}
+            {id:"1.1",q:"Укажите серосодержащую аминокислоту.",opts:["Серин","Аланин","Метионин","Пролин"],correct:[2]},
+            {id:"1.2",q:"Укажите отрицательно заряженную аминокислоту.",opts:["Серин","Аспарагиновая кислота","Метионин","Пролин"],correct:[1]},
+            {id:"1.3",q:"Укажите серосодержащую аминокислоту.",opts:["Серин","Аланин","Цистеин","Пролин"],correct:[2]},
+            {id:"1.4",q:"Укажите отрицательно заряженную аминокислоту.",opts:["Лизин","Глутаминовая кислота","Метионин","Пролин"],correct:[1]},
+            {id:"1.5",q:"Укажите аминокислоту, содержащую гидроксильную группу.",opts:["Метионин","Триптофан","Цистеин","Треонин"],correct:[3]},
+            {id:"1.6",q:"Укажите положительно заряженную аминокислоту.",opts:["Цистеин","Триптофан","Аргинин","Треонин"],correct:[2]},
+            {id:"1.7",q:"Укажите ароматическую аминокислоту.",opts:["Пролин","Триптофан","Аргинин","Треонин"],correct:[1]},
+            {id:"1.8",q:"Укажите положительно заряженную аминокислоту.",opts:["Цистеин","Триптофан","Лизин","Треонин"],correct:[2]},
+            {id:"1.9",q:"Выберите аминокислоту с аминогруппой в радикале.",opts:["Лизин","Пролин","Аспарагиновая кислота","Глутамин"],correct:[0]},
+            {id:"1.10",q:"Выберите аминокислоту с ароматическим радикалом.",opts:["Тирозин","Лизин","Пролин","Изолейцин"],correct:[0]},
+            {id:"1.11",q:"Выберите аминокислоту с наиболее гидрофобным радикалом.",opts:["Фенилаланин","Пролин","Гистидин","Тирозин"],correct:[0]},
+            {id:"1.12",q:"Выберите аминокислоту с наиболее гидрофильным радикалом.",opts:["Лизин","Тирозин","Лейцин","Пролин"],correct:[0]},
+            {id:"1.13",q:"Выберите аминокислоту, имеющую амидную группу в у-положении.",opts:["Аспарагиновая кислота","Аспарагин","Глутаминовая кислота","Глутамин"],correct:[3]},
+            {id:"1.14",q:"Какая аминокислота является гетероциклической?",opts:["Тирозин","Фенилаланин","Триптофан","Треонин"],correct:[2]},
+            {id:"1.15",q:"В состав какой аминокислоты входит гидроксильная группа?",opts:["Лейцин","Треонин","Гистидин","Изолейцин"],correct:[1]},
+            {id:"1.16",q:"Выберите аминокислоту, содержащую полярный незаряженный радикал.",opts:["Аспарагиновая кислота","Аспарагин","Лизин","Гистидин"],correct:[1]},
+            {id:"1.17",q:"Выберите аминокислоту с амидной группой.",opts:["Гистидин","Глутамин","Аспарагиновая кислота","Аргинин"],correct:[1]},
+            {id:"1.18",q:"Выберите аминокислоту, которая является как полярной так и гидрофобной, и радикал которой имеет шестичленный цикл.",opts:["Триптофан","Фенилаланин","Пролин","Тирозин"],correct:[3]},
+            {id:"1.19",q:"Какая аминокислота содержит индольное кольцо?",opts:["Тирозин","Гистидин","Триптофан","Пролин"],correct:[2]},
+            {id:"1.20",q:"Какая аминокислота содержит гуанидиновую группу?",opts:["Тирозин","Гистидин","Триптофан","Аргинин"],correct:[3]},
+            {id:"1.21",q:"Радикал какой аминокислоты обладает гидрофобными свойствами?",opts:["Пролин","Глутамин","Глутаминовая кислота","Серин"],correct:[0]},
+            {id:"1.22",q:"Выберите аминокислоту производное янтарной кислоты.",opts:["Аспарагиновая кислота","Аргинин","Аланин","Пролин"],correct:[0]},
+            {id:"1.23",q:"Выберите аминокислоту производное пропионовой кислоты.",opts:["Метионин","Треонин","Глутаминовая кислота","Серин"],correct:[3]},
+            {id:"1.24",q:"Выберите аминокислоту производное масляной кислоты.",opts:["Глутаминовая кислота","Лизин","Треонин","Серин"],correct:[1]},
+            {id:"1.25",q:"Какая аминокислота является производным уксусной кислоты?",opts:["Глицин","Аланин","Валин","Пролин"],correct:[0]},
+            {id:"1.26",q:"Какая аминокислота может участвовать в образовании ионной связи в белках?",opts:["Тирозин","Аргинин","Серин","Изолейцин"],correct:[1]},
+            {id:"1.27",q:"Какая аминокислота может участвовать в образовании ионной связи в белках?",opts:["Пролин","Глутамин","Аспарагиновая кислота","Валин"],correct:[2]},
+            {id:"1.28",q:"Выберите аминокислоту с наибольшим значением Rf.",opts:["Валин","Глицин","Аспарагиновая кислота","Аспарагин"],correct:[0]},
+            {id:"1.29",q:"Методом ионообменной хроматографии можно легко разделить пару аминокислот.",opts:["Асп и Глу","Глу и Лей","Лей и Вал","Лиз и Гис"],correct:[1]},
+            {id:"1.30",q:"Методом ионообменной хроматографии можно разделить пару аминокислот.",opts:["Лиз и Гли","Вал и Про","Глн и Сер","Лиз и Гис"],correct:[0]},
+            {id:"1.31",q:"Какие группы могут быть в радикалах гидрофобных аминокислот (валин, лейцин, изолейцин)?",opts:["Неполярные незаряженные группы","Полярные незаряженные группы","Основные группы","Кислые группы"],correct:[0]},
+            {id:"1.32",q:"Какая из перечисленных аминокислот имеет отрицательный заряд при рН 7,4?",opts:["Глутаминовая кислота","Аспарагин","Гистидин","Лизин"],correct:[0]},
+            {id:"1.33",q:"Какая аминокислота обладает положительным зарядом при рН 7,4?",opts:["Пролин","Глицин","Лизин","Цистеин"],correct:[2]},
+            {id:"1.34",q:"Какая аминокислота обладает отрицательным зарядом при рН 7,4?",opts:["Серин","Триптофан","Аспарагиновая кислота","Гистидин"],correct:[2]},
+            {id:"1.35",q:"Какую конфигурацию имеют аминокислоты, входящие в состав белков человека (кроме глицина)?",opts:["D-конфигурацию","L-конфигурацию","Либо Д-, либо L-конфигурацию","Не имеют энантиомеров"],correct:[1]},
+            {id:"1.36",q:"Наименьшая величина Rf при использовании метода бумажной хроматографии характерна для какой аминокислоты?",opts:["Валина","Аспарагиновой кислоты","Изолейцина","Аланина"],correct:[1]},
+            {id:"1.37",q:"Что относится к характерным физико-химическим свойствам белка?",opts:["Амфотерность","Сохранение структуры при нагревании","Неспособность к кристаллизации","Неспособность вращать плоскость поляризации света"],correct:[0]},
+            {id:"1.38",q:"При формировании какой белковой структуры проявляются нативные биологические свойства мономерных белков?",opts:["Первичной структуры","Вторичной структуры","Третичной структуры","Четвертичной структуры"],correct:[2]},
+            {id:"1.39",q:"Укажите, какой характеристикой обладает белок в изоэлектрической точке.",opts:["Обладает наибольшей степенью ионизации","Имеет наименьшую растворимость","Денатурирован","Несёт положительный заряд"],correct:[1]},
+            {id:"1.40",q:"От чего зависит изоэлектрическая точка белка?",opts:["От суммарного заряда белка","От наличия водородных связей","От наличия ароматических аминокислотных остатков","От наличия серосодержащих аминокислотных остатков"],correct:[0]},
+            {id:"1.41",q:"Выберите характеристику молекул белка в изоэлектрической точке.",opts:["Не диссоциируют","Движутся к катоду","Движутся к аноду","Электронейтральны"],correct:[3]},
+            {id:"1.42",q:"Что такое изоэлектрическая точка белка?",opts:["Значение температуры замерзания воды...","Значение рН, оптимальное для действия фермента","Значение температуры, оптимальной для действия ферментов","Значение рН, при котором суммарный заряд белка равен нулю"],correct:[3]},
+            {id:"1.43",q:"Изоэлектрическая точка белка равна 8,2. Какие аминокислоты преобладают в его составе?",opts:["Диаминомонокарбоновые","Моноаминодикарбоновые","Моноаминокарбоновые","Серосодержащие"],correct:[0]},
+            {id:"1.44",q:"Что служит движущей силой в формировании вторичной структуры белка?",opts:["Электростатическое отталкивание","Образование водородных связей","Гидрофобные взаимодействия","Высокая вязкость раствора белка"],correct:[1]},
+            {id:"1.45",q:"Каким образом организм человека получает незаменимые аминокислоты при белковом голодании?",opts:["Синтезируя их из углеводов","Синтезируя их из азотистых оснований","Расщепляя собственные белки","Синтезируя их из витаминов"],correct:[2]},
+            {id:"1.46",q:"К какому классу белков относятся иммуноглобулины?",opts:["Липопротеины","Гликопротеины","Нуклеопротеины","Фосфопротеины"],correct:[1]},
+            {id:"1.47",q:"Укажите особенность первичной структуры кислых белков.",opts:["Преобладание дикарбоновых аминокислот","Равное соотношение диамино и дикарбоновых аминокислот","Преобладание диаминомонокарбоновых аминокислот","Отсутствие диамино или дикарбоновых аминокислот"],correct:[0]},
+            {id:"1.48",q:"Как называется отдельная полипептидная цепь, входящая в состав четвертичной структуры белка?",opts:["Протомер","Домен","Глобулин","Пептид"],correct:[0]},
+            {id:"1.49",q:"Что является простетической группой гемоглобина?",opts:["Протопорфирин, соединённый с ионом железа","Протопорфирин","Порфобилиноген","Ион железа"],correct:[0]},
+            {id:"1.50",q:"Что такое фолдинг белка?",opts:["Расщепление на пептиды","Присоединение к лиганду","Сворачивание полипептидной цепи в трёхмерную структуру","Ковалентная модификация белка после трансляции"],correct:[2]},
+            {id:"1.51",q:"Сколько полипептидных цепей в молекуле инсулина?",opts:["1","2","3","4"],correct:[1]},
+            {id:"1.52",q:"Сколько дисульфидных связей в молекуле инсулина?",opts:["1","2","3","4"],correct:[2]},
+            {id:"1.53",q:"Укажите белок, имеющий красную окраску.",opts:["Коллаген","Овальбумин","Кератин","Цитохром с"],correct:[3]},
+            {id:"1.54",q:"Какое соединение может служить аллостерическим эффектором гемоглобина?",opts:["NO2","CO","CO2","NO"],correct:[2]},
+            {id:"1.55",q:"При поражении какой органа наблюдается альбуминурия?",opts:["Печени","Почек","Поджелудочной железы","Селезёнки"],correct:[1]},
+            {id:"1.56",q:"Выберите верную характеристку фетального гемоглобина.",opts:["Имеет большее сродство к кислороду, чем гемоглобин взрослого человека","Состоит из двух субъединиц","Составляет около 50% от общего содержания гемоглобина","Не связывает кислород"],correct:[0]},
+            {id:"1.57",q:"Какими связями в молекуле белка стабилизируются b-складчатые слои?",opts:["Водородными","Ковалентными","Ионными","Пептидными"],correct:[0]},
+            {id:"1.58",q:"В какой органелле деградирует большая часть внутриклеточных белков?",opts:["Ядре","Митохондрии","Аппарате Гольджи","Протеасоме"],correct:[3]},
+            {id:"1.59",q:"Выберите характеристику биологически устойчивых олигопептидов.",opts:["Образуются в организме человека прицельным протеолизом","Синтезируются в организме человека из отдельных аминокислот","Быстро разрушаются пептидазами","Не образуются в организме человека"],correct:[1]},
+            {id:"1.60",q:"Выберите устойчивый к действию пептидаз дипептид.",opts:["Гистидил-b-аланин","Цистеинилглицин","Аланилфенилаланин","Глицилглицин"],correct:[0]},
+            {id:"1.61",q:"Какие функциональные группы будут входить в состав аминокислотных радикалов полипептида, положительно заряженного при физиологическом рН?",opts:["Кислотные группы","Ароматические группы","Алифатические группы","Основные группы"],correct:[3]},
+            {id:"1.62",q:"При формировании какой пространственной структуры образуется водородная связь между отдельными субъединицами белка?",opts:["Первичной структуры","Вторичной структуры","Третичной структуры","Четвертичной структуры"],correct:[3]},
+            {id:"1.63",q:"Выберите положительно заряженные белки.",opts:["Альбумины","Глобулины","Глютелины","Гистоны"],correct:[3]},
+            {id:"1.64",q:"Какие полипептидные цепи содержит фетальный гемоглобин человека?",opts:["Только a","a и b","a и y","Только y"],correct:[2]},
+            {id:"1.65",q:"Какие белки являются ядерными?",opts:["Альбумины","Глобулины","Протамины","Проламины"],correct:[2]},
+            {id:"1.66",q:"Какой пептид образуется путём прицельного протеолиза из белкового предшественника?",opts:["Глутатион","Карнозин","Ансерин","Ангиотензин II"],correct:[3]},
+            {id:"1.67",q:"Какой метод используют для концентрирования белков?",opts:["Электрофорез","Аффинную хроматографию","Ионообменную хроматографию","Ультрафильтрацию"],correct:[3]},
+            {id:"1.68",q:"Какие сложные белки содержат N-ацетилнейраминовую кислоту?",opts:["Хромопротеины","Гликопротеины","Липопротеины","Нуклеопротеины"],correct:[1]},
+            {id:"1.69",q:"К какому классу сложных белков относится цитохром с?",opts:["Липопротеин","Нуклеопротеин","Хромопротеин","Фосфопротеин"],correct:[2]},
+            {id:"1.70",q:"На каком уровне формирования структуры белка происходит образование доменов?",opts:["Первичной структуры","Вторичной структуры","Третичной структуры","Четвертичной структуры"],correct:[2]},
+            {id:"1.71",q:"Укажите аминокислоту, остатки которой связывают гем гемоглобина с белком.",opts:["Аланин","Тирозин","Фенилаланин","Гистидин"],correct:[3]},
+            {id:"1.72",q:"Какие радикалы аминокислот на поверхности молекулы повышают растворимость белка?",opts:["Про, Тир, Фен","Мет, Иле, Лей","Трп, Про, Гли","Сер, Тре, Асп"],correct:[3]},
+            {id:"1.73",q:"Какой фактор вызывает обратимое осаждение белков сыворотки крови?",opts:["Кипячение","Раствор сульфата меди","Органические кислоты","Насыщенный раствор сульфата аммония"],correct:[3]},
+            {id:"1.74",q:"К какому классу сложных белков относятся y-глобулины?",opts:["Липопротеины","Гликопротеины","Нуклеопротеины","Флавопротеины"],correct:[1]},
+            {id:"1.75",q:"Какой фактор обеспечивает устойчивость белков в растворах?",opts:["Большое содержание аланина в белке","Гидрофобные радикалы аминокислот","Низкое содержание серина и лизина в белке","Гидратная оболочка и заряд молекул"],correct:[3]},
+            {id:"1.76",q:"Выберите белки, содержащие более 70% углеводов.",opts:["Фосфопротеины","Протеогликаны","Гемопротеины","Гликопротеины"],correct:[1]},
+            {id:"1.77",q:"Какую функцию выполняют липопротеины плазмы крови?",opts:["Терморегуляторную","Защитную","Энергетическую","Транспортную"],correct:[3]},
+            {id:"1.78",q:"Что является простетической группой цитохромов?",opts:["Ион цинка","Гем","Нуклеиновая кислота","Фосфорная кислота"],correct:[1]},
+            {id:"1.79",q:"Остатки какой аминокислоты образуют дисульфидные связи в белках?",opts:["Тирозина","Цистеина","Метионина","Триптофана"],correct:[1]},
+            {id:"1.80",q:"С какими аминокислотными остатками могут связываться ионы ртути?",opts:["Фенилаланина","Аспарагиновой кислоты","Лизина","Цистеина"],correct:[1]},
+            {id:"1.81",q:"Какое соединение может вызвать «высаливание» белков?",opts:["Трихлоруксусная кислота","Соляная кислота","Ацетон","Сульфат аммония"],correct:[3]},
+            {id:"1.82",q:"Наличием какого аминокислотного остатка обусловлены участки деспирализации в структуре белка?",opts:["Тирозина","Лизина","Валина","Пролина"],correct:[3]},
+            {id:"1.83",q:"Через какие аминокислотные остатки белков связываются углеводные остатки с помощью О-гликозидных связей?",opts:["Лизина","Аргинина","Валина","Треонина"],correct:[3]},
+            {id:"1.84",q:"К чему приводит связывание апобелков с углеводным компонентом?",opts:["Снижает их стабильность","Повышает их стабильность","Приводит к выпадению белка в осадок","Снижает их гидрофильность"],correct:[1]},
+            {id:"1.85",q:"Какой фермент относится к классу гемопротеинов?",opts:["Пепсин","Каталаза","Щелочная фосфатаза","Липаза"],correct:[1]},
+            {id:"1.86",q:"Выберите биологически активный пептид, содержащий пептидную связь, устойчивую к действию протеаз.",opts:["Глутатион","Ангиотензин","Тиролиберин","Окситоцин"],correct:[0]},
+            {id:"1.87",q:"Какова валентность железа в гемоглобине А (HbA)?",opts:["Всегда 2","Всегда 3","Может быть 2 или 3","Меняется при связывании кислорода"],correct:[0]},
+            {id:"1.88",q:"Из производных какого гетероцикла состоит молекула гема?",opts:["Пиррола","Пурина","Пиримидина","Имидазола"],correct:[0]},
+            {id:"1.89",q:"Выберите неокрашенный белок.",opts:["Амилаза","Каталаза","Миоглобин","Гемоглобин"],correct:[0]},
+            {id:"1.90",q:"Выберите простетическую группу гликопротеинов.",opts:["Галактоза","Глицерин","Глутаминовая кислота","Нуклеиновая кислота"],correct:[0]},
+            {id:"1.91",q:"Выберите пептид, образующийся путём ферментативного биосинтеза из аминокислот.",opts:["Вазопрессин","Окситоцин","Кальцитонин","Глутатион"],correct:[3]},
+            {id:"1.92",q:"С какой биохимической патологией связана серповидно-клеточная анемия?",opts:["С изменением первичной структуры a-цепей","С изменением первичной структуры b-цепей","С недостаточно интенсивным синтезом a-цепей","С недостаточно интенсивным синтезом b-цепей"],correct:[1]},
+            {id:"1.93",q:"Определите суммарный заряд трипептида Глу-Лиз-Про в водном растворе при нейтральном рН.",opts:["Нейтральный (0)","Положительный","Отрицательный","Зависит от концентрации"],correct:[0]},
+            {id:"1.94",q:"Определите суммарный заряд трипептида Асп-Лиз-Про в водном растворе при нейтральном рН.",opts:["Нейтральный (0)","Положительный","Отрицательный","Зависит от концентрации"],correct:[0]},
+            {id:"1.95",q:"Определите суммарный заряд трипептида Глн-Лиз-Про в водном растворе при нейтральном рН.",opts:["Нейтральный","Положительный","Отрицательный","Зависит от концентрации"],correct:[1]},
+            {id:"1.96",q:"Определите суммарный заряд трипептида Асн-Лиз-Про в водном растворе при нейтральном рН.",opts:["Нейтральный","Положительный","Отрицательный","Зависит от концентрации"],correct:[1]},
+            {id:"1.97",q:"Определите суммарный заряд трипептида Вал-Арг-Иле в водном растворе при нейтральном рН.",opts:["Нейтральный","Положительный","Отрицательный","Зависит от концентрации"],correct:[1]},
+            {id:"1.98",q:"Определите суммарный заряд трипептида Вал-Гис-Иле в водном растворе при нейтральном рН.",opts:["Нейтральный","Положительный","Отрицательный","Зависит от концентрации"],correct:[1]},
+            {id:"1.99",q:"Определите суммарный заряд трипептида Сер-Вал-Асн в водном растворе при нейтральном рН.",opts:["Нейтральный","Положительный","Отрицательный","Зависит от концентрации"],correct:[0]},
+            {id:"1.100",q:"Определите суммарный заряд трипептида Тир-Иле-Глу в водном растворе при нейтральном рН.",opts:["Нейтральный","Положительный","Отрицательный","Зависит от концентрации"],correct:[2]},
+            {id:"1.101",q:"Определите суммарный заряд трипептида Тре-Ала-Тир в водном растворе при нейтральном рН.",opts:["Нейтральный","Положительный","Отрицательный","Зависит от концентрации"],correct:[0]},
+            {id:"1.102",q:"Определите суммарный заряд трипептида Лиз-Гис-Иле в водном растворе при нейтральном рН.",opts:["+1","+2","0","-1"],correct:[1]},
+            {id:"1.103",q:"Определите суммарный заряд трипептида Гис-Асп-Лей в водном растворе при нейтральном рН.",opts:["-1","-2","0","+1"],correct:[2]},
+            {id:"1.104",q:"Определите суммарный заряд трипептида Тре-Асп-Тир в водном растворе при нейтральном рН.",opts:["-1","-2","0","+1"],correct:[0]},
+            {id:"1.105",q:"Определите суммарный заряд трипептида Тре-Глу-Ала в водном растворе при нейтральном рН.",opts:["-1","-2","0","+1"],correct:[0]},
+            {id:"1.106",q:"Определите суммарный заряд трипептида Лиз-Глу-Про в водном растворе при нейтральном рН.",opts:["+1","+2","0","-1"],correct:[2]},
+            {id:"1.107",q:"Определите суммарный заряд трипептида Тре-Асн-Цис в водном растворе при нейтральном рН.",opts:["-1","-2","0","+1"],correct:[2]},
+            {id:"1.108",q:"Определите суммарный заряд трипептида Тре-Глн-Ала в водном растворе при нейтральном рН.",opts:["-1","-2","0","+1"],correct:[2]},
+            {id:"1.109",q:"Определите суммарный заряд трипептида Тре-Арг-Гис в водном растворе при нейтральном рН.",opts:["+1","+2","0","-1"],correct:[1]},
+            {id:"1.110",q:"Определите суммарный заряд трипептида Вал-Лиз-Про в водном растворе при нейтральном рН.",opts:["-1","-2","0","+1"],correct:[3]},
+            {id:"1.111",q:"Определите суммарный заряд трипептида Гис-Асп-Глн в водном растворе при нейтральном рН.",opts:["-1","-2","0","+1"],correct:[2]},
+            {id:"1.112",q:"Определите суммарный заряд трипептида Гис-Глу-Асн в водном растворе при нейтральном рН.",opts:["+1","+2","0","-1"],correct:[2]},
+            {id:"1.113",q:"Укажите незаменимую аминокислоту.",opts:["Серин","Аспарагин","Пролин","Изолейцин"],correct:[3]},
+            {id:"1.114",q:"Укажите незаменимую аминокислоту.",opts:["Пролин","Серин","Валин","Глутаминовая кислота"],correct:[2]},
+            {id:"1.115",q:"Укажите незаменимую аминокислоту.",opts:["Цистеин","Серин","Аспарагин","Лейцин"],correct:[3]},
+            {id:"1.116",q:"Укажите незаменимую аминокислоту.",opts:["Глутаминовая кислота","Фенилаланин","Аспарагиновая кислота","Глицин"],correct:[1]},
+            {id:"1.117",q:"Укажите незаменимую аминокислоту.",opts:["Триптофан","Тирозин","Аспарагин","Пролин"],correct:[0]},
+            {id:"1.118",q:"Укажите незаменимую аминокислоту.",opts:["Цистеин","Метионин","Глутамин","Аланин"],correct:[1]},
+            {id:"1.119",q:"Укажите незаменимую аминокислоту.",opts:["Аланин","Серин","Лизин","Цистеин"],correct:[2]},
+            {id:"1.120",q:"Укажите незаменимую аминокислоту.",opts:["Треонин","Цистеин","Глутамин","Серин"],correct:[0]},
+            {id:"1.121",q:"Выберите верное утверждение.",opts:["Домен белка - элемент третичной структуры... фолдинг независимо...","Домен - элемент вторичной...","Домен - элемент третичной... внутри мембраны","Домен - элемент четвертичной..."],correct:[0]},
+            {id:"1.122",q:"Какие из радикалов аминокислот могут образовывать ионные связи при формировании пространственной структуры белка?",opts:["Гли, Глу, Глн","Асп, Глу, Лиз","Сер, Цис, Про","Асп, Асн, Ала"],correct:[1]},
+            {id:"1.123",q:"Какие из радикалов аминокислот могут участвовать в гидрофобных взаимодействиях в пространственной структуре белка?",opts:["Гли, Ала, Иле","Про, Трп, Арг","Ала, Вал, Про","Лей, Иле, Гис"],correct:[2]},
+            {id:"1.124",q:"Какие радикалы аминокислотных остатков в пространственной структуре белка способны к гидрофобным взаимодействиям?",opts:["Радикалы, содержащие заряженные группы","Радикалы, способные к ионизации","Полярные радикалы","Неполярные радикалы"],correct:[3]},
+            {id:"1.125",q:"Какие из перечисленных радикалов аминокислот могут участвовать в формировании псевдопептидных связей?",opts:["Лиз, Арг, Цис","Асн, Глн, Лиз","Глу, Глн, Асн","Глу, Асп, Арг"],correct:[3]},
+            {id:"1.126",q:"Какие из перечисленных радикалов аминокислот могут участвовать в формировании псевдопептидных связей?",opts:["Содержащие гидроксильную группу","Содержащие амидную группу","Содержащие карбоксильную группу","Радикалы ароматических аминокислот"],correct:[2]},
+            {id:"1.127",q:"Выберите верное утверждение.",opts:["Радикалы... в цис-положении...","Средняя длина пептидной связи меньше, чем длина одинарной С-N...","Все атомы... в одной плоскости...","Пептидная связь имеет переходящие..."],correct:[1]},
+            {id:"1.128",q:"Выберите верное утверждение.",opts:["Пептидная связь имеет частичный характер двойной связи (планарность)...","Средняя длина... меньше, чем длина двойной...","Все атомы... в одной плоскости... цис-положение","Пептидная связь имеет переходящие..."],correct:[0]}
         ]
     },
     s5: {
@@ -320,8 +494,7 @@ const topicData = {
             {q:"98. Фосфофруктокиназа-1. Класс?",opts:["Транслоказы","Трансферазы (киназы)","Лиазы","Лигазы"],correct:[1]},
             {q:"99. Гексокиназа. Класс?",opts:["Транслоказы","Трансферазы","Лиазы","Лигазы"],correct:[1]}
         ]
-    }
-    ,
+    },
     s6: {
         name: "6. Витамины и коферменты (1-149)",
         questions: [
@@ -333,7 +506,7 @@ const topicData = {
             {q:"6. Какая патология налюдается при авитаминозе фолиевой кислоты?",opts:["Макроцитарная анемия","Полиневрит","Себорейный дерматит","Остеопороз"],correct:[0]},
             {q:"7. К какой патологии может приводить недостаток в организме фолиевой кислоты?",opts:["Бери-бери","Полиневрит","Себорейный дерматит","Нарушение синтеза ДНК"],correct:[3]},
             {q:"8. Укажите заболевание, причиной которого служит недостаток кобаламина.",opts:["Гемолитическая анемия","Серповидноклеточная анемия","Мегалобластная анемия","Пеллагра"],correct:[2]},
-            {q:"9. Укажите один из начальных признаков пеллагры.",opts:["Развитие куриной слепоты","Появление дерматитов на открытых участках кожи","Нарушение координации","Анемия"],correct:[1]},
+            {q:"9. Укажите один из начальных признаков пеллагры.",opts:["Развитие куриной слепоты","Появление дерматитов на открытых участках","Нарушение координации","Анемия"],correct:[1]},
             {q:"10. Какое заболевание развивается при недостатке витамина С?",opts:["Пеллагра","Цинга","Рахит","Бери-бери"],correct:[1]},
             {q:"11. Гиповитаминоз С приводит к нарушению созревания коллагена. В каких процессах участвует этот витамин?",opts:["Гидроксилирования пролина и лизина","Карбоксилирования пролина и лизина","Гидроксилирования аргинина","Карбоксилирования аргинина"],correct:[0]},
             {q:"12. Какая патология приводит к гиповитаминозу витаминов А, D, Е, K?",opts:["Нарушение фактора Касла","Дефицит протеаз","Изменение микрофлоры","Нарушения синтеза/выделения жёлчных кислот"],correct:[3]},
@@ -419,7 +592,7 @@ const topicData = {
             {q:"92. Как получается активная форма рибофлавина?",opts:["В результате ацилирования","В результате гидрирования","В результате фосфорилирования","В результате метилирования"],correct:[2]},
             {q:"93. Частью какой молекулы является рибофлавин?",opts:["Ферродоксина","ФАД","Пиридоксальфосфата","Пирофосфата"],correct:[1]},
             {q:"94. В состав какого кофермента входит пантотеновая кислота?",opts:["Кофермента А","НАД","ФАД","ТГФК"],correct:[0]},
-            {q:"95. Какое соединение относится к витаминам, но не образует коферментную форму?",opts:["Аскорбиновая кислота","Фолиевая кислота","Ретиноевая кислота","Липоевая кислота"],correct:[2]}, /* Ретиноевая кислота - гормоноподобная, не кофермент. Аскорбиновая - кофактор (не совсем кофермент в классическом смысле, но в контексте тестов часто рассматривается отдельно). Ключ В (Ретиноевая) наиболее вероятен */
+            {q:"95. Какое соединение относится к витаминам, но не образует коферментную форму?",opts:["Аскорбиновая кислота","Фолиевая кислота","Ретиноевая кислота","Липоевая кислота"],correct:[2]},
             {q:"96. Какой из жирорастворимых витаминов образует коферментную форму?",opts:["Витамин Е","Витамин К","Витамин D","Витамин А"],correct:[1]},
             {q:"97. Как активируется пиридоксин?",opts:["Гидрированием","Фосфорилированием","Метилированием","Аденилированием"],correct:[1]},
             {q:"98. Выберите коферментную форму фолиевой кислоты.",opts:["ТПФ","ТГФК","НАД","ФАД"],correct:[1]},
@@ -457,12 +630,12 @@ const topicData = {
             {q:"130. Укажите основную функцию биотина.",opts:["Перенос карбоксильных групп","Перенос аминогрупп","Перенос метильных групп","Перенос ацильных групп"],correct:[0]},
             {q:"131. У какого фермента биотин является коферментом?",opts:["Пируватдегидрогеназы","Лактатдегидрогеназы","Ацетил-SКоА-карбоксилазы","Тиолазы"],correct:[2]},
             {q:"132. Какой витамин участвует в реакциях гидроксилирования?",opts:["Аскорбиновая кислота","Биотин","Фолиевая кислота","Пантотеновая кислота"],correct:[0]},
-            {q:"133. Какие витамины участвуют в ОВР?",opts:["Ретинол и биотин","Токоферол и биотин","Тиамин и аскорбиновая кислота","Ретинол и аскорбиновая кислота"],correct:[3]}, /* Ключ Г */
+            {q:"133. Какие витамины участвуют в ОВР?",opts:["Ретинол и биотин","Токоферол и биотин","Тиамин и аскорбиновая кислота","Ретинол и аскорбиновая кислота"],correct:[3]},
             {q:"134. Какие ферменты катализируют взаимопревращения ретинола и ретиналя?",opts:["НАД-зависимые дегидрогеназы","Декарбоксилазы","Протеинкиназы","Изомеразы"],correct:[0]},
             {q:"135. Какое соединение стимулирует экспрессию генов деления и дифференцировки?",opts:["Ретиноевая кислота","Фолиевая кислота","Аскорбиновая кислота","Пантотеновая кислота"],correct:[0]},
             {q:"136. Всасывание каких витаминов нарушается при ухудшении желчеотделения?",opts:["Цианокобаламина и ретинола","Ретинола и кальциферола","Ниацина и токоферола","Рибофлавина и кальциферола"],correct:[1]},
             {q:"137. Какие из витаминов обладают антиоксидантными свойствами?",opts:["Витамины А, С, Е","Витамины А, D, Е","Витамины С, D, Е","Витамины А, С, К"],correct:[0]},
-            {q:"138. Какие из витаминов имеют гормонально активную форму?",opts:["Витамины А, С, Е","Витамины А, D, Е","Витамины С, D, Е","Витамины А, С, К"],correct:[1]}, /* А (ретиноевая) и D (кальцитриол) */
+            {q:"138. Какие из витаминов имеют гормонально активную форму?",opts:["Витамины А, С, Е","Витамины А, D, Е","Витамины С, D, Е","Витамины А, С, К"],correct:[1]},
             {q:"139. Какие из соединений имеют в составе пиридиновое кольцо?",opts:["Ретинол, пиридоксамин","Никотинамид, рибофлавин","Никотинамид, пиридоксамин","Токоферол, тиамин"],correct:[2]},
             {q:"140. Коферментная форма какого витамина формирует псевдопептидные связи с лизином?",opts:["Тиамин","Рибофлавин","Биотин","Никотинамид"],correct:[2]},
             {q:"141. В состав каких коферментов входит остаток рибозы?",opts:["НАД, ФАД и HSKoA","ТПФ, НАД и ФАД","ТГФК, ФАД и HSKoA","НАД, ТГФК и ФМН"],correct:[0]},
@@ -471,7 +644,7 @@ const topicData = {
             {q:"144. Дефицит каких витаминов - ксерофтальмия и патология роговицы?",opts:["Ретинол, рибофлавин, биотин","Тиамин, биотин, менахинон","Ниацин, менахинон, ретинол","Кобаламин, рибофлавин, ниацин"],correct:[0]},
             {q:"145. Какая причина анемии при атрофическом гастрите?",opts:["Нарушение всасывания железа","Нарушение всасывания фолиевой","Нарушение всасывания кобаламина","Нарушение всасывания гема"],correct:[2]},
             {q:"146. С чем связана анемия при атрофическом гастрите?",opts:["С дефицитом фактора Касла","С дефицитом железа","С дефицитом фолиевой кислоты","С дефицитом аскорбиновой кислоты"],correct:[0]},
-            {q:"147. С чем связана анемия при гиповитаминозе С?",opts:["Нарушение гидроксилирования пролина...","Нарушение всасывания железа","Нарушение всасывания триптофана","Нарушение обмена фолиевой кислоты"],correct:[1]}, /* Аскорбинка восстанавливает Fe3+ в Fe2+ для всасывания. Ключ Б */
+            {q:"147. С чем связана анемия при гиповитаминозе С?",opts:["Нарушение гидроксилирования пролина...","Нарушение всасывания железа","Нарушение всасывания триптофана","Нарушение обмена фолиевой кислоты"],correct:[1]},
             {q:"148. При каком нарушении обмена витамина D возможно развитие остеопороза?",opts:["При гиповитаминозе","При гипервитаминозе","При авитаминозе","Как при гипо-, так и при гипервитаминозе"],correct:[3]},
             {q:"149. При каком нарушении обмена витамина D возможна кальцификация мягких тканей?",opts:["Хроническом гиповитаминозе","Хроническом гипервитаминозе","Остром гипервитаминозе","Остром гиповитаминозе"],correct:[1]}
         ]
@@ -479,12 +652,12 @@ const topicData = {
     s7: {
         name: "7. Гормоны (1-208)",
         questions: [
-            {q:"1. Какие гормоны синтезируются в гипоталамусе?",opts:["Тропные гормоны","Статины и либерины","Катехоламины","Минералкортикоиды"],correct:[1]},
+            {q:"1. Какие гормоны синтезируются в гипоталамусе?",opts:["Тропные гормоны","Статины (и Либерины)","Катехоламины","Минералкортикоиды"],correct:[1]},
             {q:"2. Выберите гормон гипоталамуса.",opts:["Тиролиберин","Тироксин","СТГ","Глюкагон"],correct:[0]},
             {q:"3. Выберите гормон гипоталамуса.",opts:["АКТГ","Соматостатин","СТГ","Соматомедин С"],correct:[1]},
-            {q:"4. Выберите верное утверждение.",opts:["Соматолиберин синтезируется в щитовидной железе","Соматолиберин - в задней доле гипофиза","Соматолиберин - в гипоталамусе","Соматолиберин - в паращитовидной железе"],correct:[2]},
-            {q:"5. Выберите верное утверждение.",opts:["Кортиколиберин - островками Лангерганса","Кортиколиберин - в тимусе","Кортиколиберин - в гипоталамусе","Кортиколиберин - в гипофизе"],correct:[2]},
-            {q:"6. Выберите верное утверждение.",opts:["АДГ синтезируется в гипоталамусе","АДГ синтезируется в задней доле гипофиза","АДГ синтезируется в передней доле","АДГ синтезируется в надпочечниках"],correct:[0]},
+            {q:"4. Выберите верное утверждение.",opts:["Соматолиберин - в щитовидной","Соматолиберин - в задней доле","Соматолиберин - в гипоталамусе","Соматолиберин - в паращитовидной"],correct:[2]},
+            {q:"5. Выберите верное утверждение.",opts:["Кортиколиберин - островками","Кортиколиберин - в тимусе","Кортиколиберин - в гипоталамусе","Кортиколиберин - в гипофизе"],correct:[2]},
+            {q:"6. Выберите верное утверждение.",opts:["АДГ - в гипоталамусе","АДГ - в задней доле гипофиза","АДГ - в передней доле","АДГ - в надпочечниках"],correct:[0]},
             {q:"7. Выберите гормон гипофиза.",opts:["Тиролиберин","АКТГ","Кальцитонин","Тироксин"],correct:[1]},
             {q:"8. Выберите гормон гипофиза.",opts:["Соматолиберин","Соматостатин","Соматотропин","Соматомедин С"],correct:[2]},
             {q:"9. Выберите гормон гипофиза.",opts:["Тиролиберин","Тироксин","Тиреотропин","Соматостатин"],correct:[2]},
@@ -492,7 +665,7 @@ const topicData = {
             {q:"11. Выберите гормон передней доли гипофиза.",opts:["Кортиколиберин","Вазопрессин","АКТГ","Меланотропин"],correct:[2]},
             {q:"12. Укажите место образования пролактина.",opts:["Передняя доля гипофиза","Задняя доля гипофиза","Яичники","Щитовидная железа"],correct:[0]},
             {q:"13. Выберите верное утверждение.",opts:["Меланотропин - в паращитовидных","Меланотропин - в гипоталамусе","Меланотропин - в средней доле гипофиза","Меланотропин - в передней доле"],correct:[2]},
-            {q:"14. Выберите верное утверждение.",opts:["Окситоцин секретируется из средней доли","Окситоцин из передней доли","Окситоцин из гипоталамуса","Окситоцин из задней доли гипофиза"],correct:[3]},
+            {q:"14. Выберите верное утверждение.",opts:["Окситоцин из средней доли","Окситоцин из передней доли","Окситоцин из гипоталамуса","Окситоцин из задней доли гипофиза"],correct:[3]},
             {q:"15. Выберите верное утверждение.",opts:["Мелатонин в гипофизе","Мелатонин в эпифизе","Мелатонин в гипоталамусе","Мелатонин в надпочечниках"],correct:[1]},
             {q:"16. Гормон, синтезируемый в островковых клетках поджелудочной?",opts:["Паратгормон","Адреналин","Кальцитонин","Глюкагон"],correct:[3]},
             {q:"17. Выберите верное утверждение.",opts:["Глюкагон - B-клетками","Глюкагон - A-клетками","Глюкагон - в коре надпочечников","Глюкагон - в мозговом слое"],correct:[1]},
@@ -500,7 +673,7 @@ const topicData = {
             {q:"19. Какой гормон относится к глюкокортикоидам?",opts:["Дезоксикортикостерон","Кортизон","Андростерон","Эстрон"],correct:[1]},
             {q:"20. Выберите гормон коры надпочечников.",opts:["Кортизол","Адреналин","Тироксин","СТГ"],correct:[0]},
             {q:"21. Выберите минералокортикоид.",opts:["Кортикостерон","Альдостерон","Кортизол","Адреналин"],correct:[1]},
-            {q:"22. Выберите верное утверждение.",opts:["Альдостерон в поджелудочной","Альдостерон в гипофизе","Альдостерон в мозговом слое","Альдостерон в корковом слое надпочечников"],correct:[3]},
+            {q:"22. Выберите верное утверждение.",opts:["Альдостерон в поджелудочной","Альдостерон в гипофизе","Альдостерон в мозговом слое","Альдостерон в корковом слое"],correct:[3]},
             {q:"23. Выберите гормоны мозгового слоя надпочечников.",opts:["Катехоламины","Стероидные","Либерины","Статины"],correct:[0]},
             {q:"24. Какой гормон относится к гормонам мозгового слоя?",opts:["Кортизол","Глюкагон","Альдостерон","Норадреналин"],correct:[3]},
             {q:"25. Где образуется адреналин?",opts:["Паращитовидные железы","Мозговое вещество надпочечников","A-клетки","Корковое вещество"],correct:[1]},
@@ -508,7 +681,7 @@ const topicData = {
             {q:"27. Где образуется кальцитонин?",opts:["Паращитовидные","Надпочечники","Поджелудочная","Щитовидная железа"],correct:[3]},
             {q:"28. Какой гормон образуется в щитовидной железе?",opts:["Адреналин","Трийодтиронин","АДГ","Ацетилхолин"],correct:[1]},
             {q:"29. Выберите женский половой гормон.",opts:["Эстриол","Тестостерон","Альдостерон","Кортикостерон"],correct:[0]},
-            {q:"30. Где образуется эстрадиол?",opts:["Поджелудочная","Мозговой слой надпочечников","Яичники","Гипофиз"],correct:[2]},
+            {q:"30. Где образуется эстрадиол?",opts:["Поджелудочная","Мозговой слой","Яичники","Гипофиз"],correct:[2]},
             {q:"31. Укажите возможное место синтеза эстрадиола.",opts:["Семенники","Кора надпочечников","Гипофиз","Эпифиз"],correct:[1]},
             {q:"32. Укажите основной источник прогестерона.",opts:["Жёлтое тело","Кора надпочечников","Мозговое вещество","Гранулёзные клетки"],correct:[0]},
             {q:"33. 17-Кетостероиды образуются в...",opts:["Семенниках","Надпочечниках","Печени","Яичниках"],correct:[2]},
@@ -547,7 +720,7 @@ const topicData = {
             {q:"66. Гормон, участвующий в регуляции осмотического давления (реабсорбция воды)?",opts:["Окситоцин","Кальцитонин","Тестостерон","Вазопрессин"],correct:[3]},
             {q:"67. Какой гормон оказывает наибольшее влияние на водно-солевой обмен?",opts:["Инсулин","Глюкагон","Паратгормон","Вазопрессин"],correct:[3]},
             {q:"68. Укажите верное утверждение.",opts:["Вазопрессин и альдостерон - стероидные","Вазопрессин и альдостерон регулируют водно-солевой обмен","... регулируют обмен кальция","... пептидные"],correct:[1]},
-            {q:"69. Гормон, увеличивающий пигментацию?",opts:["Лютропин","АКТГ (частично, но Меланотропин основной)","Меланотропин","СТГ"],correct:[2]},
+            {q:"69. Гормон, увеличивающий пигментацию?",opts:["Лютропин","АКТГ","Меланотропин","СТГ"],correct:[2]},
             {q:"70. Каково биологическое действие инсулина?",opts:["Повышает глюкозу","Понижает глюкозу","Расщепляет гликоген","Синтезирует глюкозу"],correct:[1]},
             {q:"71. Гормон, повышающий захват глюкозы мышцами?",opts:["Глюкагон","Инсулин","СТГ","Тироксин"],correct:[1]},
             {q:"72. Что ингибирует секрецию инсулина?",opts:["Гипергликемия","Высокий уровень аргинина","Секретин","Высокий уровень адреналина"],correct:[3]},
@@ -556,7 +729,7 @@ const topicData = {
             {q:"75. Выберите верное утверждение.",opts:["Глюкагон при гипогликемии","Глюкагон при стрессе","Глюкагон при гипергликемии","Глюкагон при увеличении давления"],correct:[0]},
             {q:"76. Основной глюкокортикоид у человека?",opts:["Кортикостерон","Кортизол","Кортизон","Эстрон"],correct:[1]},
             {q:"77. Гормон, уменьшающий проницаемость мембраны для глюкозы?",opts:["Инсулин","Альдостерон","Кортизол","Тироксин"],correct:[2]},
-            {q:"78. Чем опасна резкая отмена глюкокортикоидов?",opts:["Снижают АД","Снижают выработку собственных глюкокортикоидов (атрофия коры)","Аллергия","Тормозят синтез глюкозы"],correct:[1]},
+            {q:"78. Чем опасна резкая отмена глюкокортикоидов?",opts:["Снижают АД","Снижают выработку собственных глюкокортикоидов","Аллергия","Тормозят синтез глюкозы"],correct:[1]},
             {q:"79. Какие процессы регулируют минералокортикоиды?",opts:["Обмен БЖУ","Обмен Ca, P","Обмен Na, K, воды","Обмен Na, Ca, воды"],correct:[2]},
             {q:"80. Какой гормон регулирует водно-солевой обмен?",opts:["Эстрадиол","Альдостерон","Гидрокортизон","Норадреналин"],correct:[1]},
             {q:"81. Какой гормон регулирует обмен ионов натрия и калия?",opts:["Альдостерон","Тестостерон","Кальцитонин","Паратгормон"],correct:[0]},
@@ -568,7 +741,7 @@ const topicData = {
             {q:"87. Действие физиологических концентраций тироксина?",opts:["Увеличивает синтез белка (анаболическое)","Отложение Ca","Разобщает","Понижает температуру"],correct:[0]},
             {q:"88. Биологическое действие кальцитонина?",opts:["Понижает Ca и P в крови","Повышает Ca и P","Повышает Ca","Снижает K"],correct:[0]},
             {q:"89. Ткань-мишень для кальцитонина?",opts:["Нервная","Костная","Мышечная","Жировая"],correct:[1]},
-            {q:"90. Биологическое действие паратгормона?",opts:["Понижает глюкозу","Повышает Ca, понижает P (в итоге Ca повышается)","Понижает Ca и P","Повышает Ca"],correct:[3]},
+            {q:"90. Биологическое действие паратгормона?",opts:["Понижает глюкозу","Повышает Ca, понижает P","Понижает Ca и P","Повышает Ca"],correct:[3]},
             {q:"91. Биологическое действие паратгормона?",opts:["Понижает Ca","Повышает Ca и P","Повышает Ca, снижает P","Повышает P, снижает Ca"],correct:[2]},
             {q:"92. Гормон, регулирующий обмен кальция и фосфора?",opts:["Инсулин","Адреналин","Паратгормон","Окситоцин"],correct:[2]},
             {q:"93. Основная функция паращитовидной железы?",opts:["Натриевый баланс","Калиевый","Кальциевый","Бикарбонатный"],correct:[2]},
@@ -606,7 +779,7 @@ const topicData = {
             {q:"125. Где рецепторы для стероидных гормонов?",opts:["Митохондрии","Мембрана","Цитоплазма","Лизосомы"],correct:[2]},
             {q:"126. Где рецепторы к глюкокортикоидам?",opts:["Цитоплазма","Рибосомы","Наружная мембрана","Внутренняя мембрана"],correct:[0]},
             {q:"127. Верное утверждение для внутриклеточного механизма?",opts:["Связывается с цГМФ","Только через цАМФ","Меняет конформацию","Комплекс присоединяется к ДНК"],correct:[3]},
-            {q:"128. Механизм стероидного гормона?",opts:["G-белки","Связывание с ДНК (гормонреспонсивными элементами)","ИФ3","Аденилатциклаза"],correct:[1]},
+            {q:"128. Механизм стероидного гормона?",opts:["G-белки","Связывание с ДНК","ИФ3","Аденилатциклаза"],correct:[1]},
             {q:"129. Гормон с внутриклеточным рецептором?",opts:["Прогестерон","Инсулин","АКТГ","Лютропин"],correct:[0]},
             {q:"130. Гормон с внутриклеточным рецептором?",opts:["Кальцитриол","Глюкагон","Адреналин","Меланостатин"],correct:[0]},
             {q:"131. Гормон с рецептором в цитоплазме?",opts:["Глюкагон","Паратгормон","Меланостатин","Кортизол"],correct:[3]},
@@ -691,199 +864,269 @@ const topicData = {
     }
 };
 
-// --- ЛОГИКА ПРИЛОЖЕНИЯ ---
 let activeQuestions = [];
 let currentIndex = 0;
 let userAnswers = {};
 let currentMode = 'default';
-const storageKey = 'biochem_full_2019_v2';
+const storageKey = 'biochem_pro_v3';
 
-// DOM Elements (from Part 1 HTML)
-const startScreen = document.getElementById('start-screen');
-const quizScreen = document.getElementById('quiz-screen');
-const resultScreen = document.getElementById('result-screen');
-const footer = document.getElementById('footer');
-const topicListEl = document.getElementById('topic-list');
-const mistakesBtn = document.getElementById('mistakes-btn');
-
-// Init
 document.addEventListener('DOMContentLoaded', () => {
+    loadTheme();
     populateTopics();
     const saved = JSON.parse(localStorage.getItem(storageKey));
     if (saved && saved.answers) {
-        const hasMistakes = Object.values(saved.answers).some(a => !a.isCorrect);
-        if (hasMistakes) mistakesBtn.style.display = 'block';
+        const hasMistakes = Object.values(saved.answers).some(a => a.isSubmitted && !a.isCorrect);
+        if (hasMistakes) document.getElementById('mistakes-btn-start').style.display = 'flex';
+        if(saved.rawQuestions && saved.rawQuestions.length > 0) document.getElementById('resume-block').style.display = 'block';
     }
 });
 
 function populateTopics() {
+    const list = document.getElementById('topic-list');
     for (const key in topicData) {
         const topic = topicData[key];
         const div = document.createElement('div');
         div.className = 'topic-choice';
-        div.innerHTML = `<label style="display:flex;align-items:center;width:100%;cursor:pointer"><input type="checkbox" class="topic-cb" data-key="${key}" checked> ${topic.name}</label>`;
-        topicListEl.appendChild(div);
+        div.onclick = (e) => {
+            if(e.target.tagName !== 'INPUT') {
+                const cb = div.querySelector('input');
+                cb.checked = !cb.checked;
+            }
+        };
+        div.innerHTML = `
+            <input type="checkbox" class="topic-checkbox" data-key="${key}" checked>
+            <span style="font-weight:600; color:var(--text-primary); margin:0;">${topic.name}</span>
+            <span>${topic.questions.length} вопр.</span>
+        `;
+        list.appendChild(div);
     }
 }
 
-function toggleSelectAll() {
-    const cbs = document.querySelectorAll('.topic-cb');
+function toggleSelectAll(btn) {
+    const cbs = document.querySelectorAll('.topic-checkbox');
     const all = Array.from(cbs).every(c => c.checked);
     cbs.forEach(c => c.checked = !all);
+    btn.textContent = all ? "Выбрать все" : "Снять выделение";
+}
+
+function toggleTheme() {
+    const current = document.body.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    if(next === 'light') document.body.removeAttribute('data-theme');
+    else document.body.setAttribute('data-theme', 'dark');
+    localStorage.setItem('theme', next);
+    
+    document.querySelectorAll('.theme-toggle i').forEach(icon => {
+        icon.className = next === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    });
+}
+
+function loadTheme() {
+    const th = localStorage.getItem('theme');
+    if(th === 'dark') document.body.setAttribute('data-theme', 'dark');
+}
+
+function goHome() {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('start-screen').classList.add('active');
+    document.getElementById('quiz-footer').style.display = 'none';
 }
 
 function startQuiz(mode) {
     currentMode = mode;
-    activeQuestions = [];
-    userAnswers = {};
     
-    if (mode === 'mistakes') {
+    if (mode === 'resume') {
         const saved = JSON.parse(localStorage.getItem(storageKey));
-        const mistakes = [];
         if (saved) {
-            for (const uid in saved.answers) {
-                if (!saved.answers[uid].isCorrect) mistakes.push(uid);
-            }
-        }
-        if (!mistakes.length) return alert("Нет ошибок для отработки");
-        
-        for (const key in topicData) {
-            topicData[key].questions.forEach((q, i) => {
-                const uid = key + '-' + i;
-                if (mistakes.includes(uid)) activeQuestions.push({...q, uid, topic: topicData[key].name});
-            });
+            activeQuestions = saved.rawQuestions;
+            userAnswers = saved.answers;
+            currentIndex = saved.currentIndex;
+            for(let k in userAnswers) userAnswers[k].selected = new Set(userAnswers[k].selected);
+        } else {
+            return startQuiz('new');
         }
     } else {
-        const selected = Array.from(document.querySelectorAll('.topic-cb:checked')).map(c => c.dataset.key);
-        if (!selected.length) return alert("Выберите тему");
+        activeQuestions = [];
+        currentIndex = 0;
+        userAnswers = {};
         
-        selected.forEach(key => {
-            topicData[key].questions.forEach((q, i) => {
-                activeQuestions.push({...q, uid: key + '-' + i, topic: topicData[key].name});
+        if (mode === 'mistakes') {
+            const saved = JSON.parse(localStorage.getItem(storageKey));
+            const oldAnswers = saved ? saved.answers : {};
+            const mistakeIds = [];
+            for(let k in oldAnswers) {
+                if(oldAnswers[k].isSubmitted && !oldAnswers[k].isCorrect) mistakeIds.push(k);
+            }
+            if(mistakeIds.length === 0) return alert("Нет ошибок для отработки");
+            for(let k in topicData) {
+                topicData[k].questions.forEach(q => {
+                    if(mistakeIds.includes(q.id)) activeQuestions.push({...q, topic: topicData[k].name});
+                });
+            }
+            activeQuestions.forEach(q => userAnswers[q.id] = { selected: new Set(), isSubmitted: false, isCorrect: false });
+        } else {
+            const selectedKeys = Array.from(document.querySelectorAll('.topic-checkbox:checked')).map(c => c.dataset.key);
+            if(selectedKeys.length === 0) return alert("Выберите тему");
+            
+            selectedKeys.forEach(k => {
+                topicData[k].questions.forEach(q => {
+                    activeQuestions.push({...q, topic: topicData[k].name});
+                });
             });
-        });
-        
-        if (mode === 'shuffle') {
-            for (let i = activeQuestions.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [activeQuestions[i], activeQuestions[j]] = [activeQuestions[j], activeQuestions[i]];
+            
+            if(mode === 'shuffle') {
+                for (let i = activeQuestions.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [activeQuestions[i], activeQuestions[j]] = [activeQuestions[j], activeQuestions[i]];
+                }
             }
         }
     }
     
-    currentIndex = 0;
-    showScreen('quiz');
-    renderQuestion();
-}
-
-function showScreen(name) {
+    if(activeQuestions.length === 0) return alert("Нет вопросов");
+    
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(name + '-screen').classList.add('active');
-    footer.style.display = name === 'quiz' ? 'grid' : 'none';
+    document.getElementById('quiz-screen').classList.add('active');
+    document.getElementById('quiz-footer').style.display = 'block';
+    renderQuestion();
 }
 
 function renderQuestion() {
     const q = activeQuestions[currentIndex];
-    document.getElementById('progress-text').innerText = `${currentIndex + 1} / ${activeQuestions.length}`;
-    document.getElementById('topic-name').innerText = q.topic.split('.')[0]; // Short topic
-    document.getElementById('q-text').innerText = q.q;
+    const state = userAnswers[q.id] || { selected: new Set(), isSubmitted: false };
+    userAnswers[q.id] = state;
+    
+    document.getElementById('progress-pill').textContent = `${currentIndex + 1} / ${activeQuestions.length}`;
+    document.getElementById('q-id-display').textContent = q.topic;
+    document.getElementById('q-text').textContent = q.q;
     
     const list = document.getElementById('options-list');
     list.innerHTML = '';
     
-    const ans = userAnswers[q.uid];
-    
-    q.opts.forEach((opt, i) => {
-        const el = document.createElement('div');
-        el.className = 'option';
-        if (ans) {
-            if (q.correct.includes(i)) el.classList.add('correct');
-            else if (ans.selected === i) el.classList.add('incorrect');
-            el.innerHTML = `<div>${q.correct.includes(i) ? '<i class="fas fa-check"></i>' : (ans.selected === i ? '<i class="fas fa-times"></i>' : '')}</div><div>${opt}</div>`;
+    q.opts.forEach((txt, idx) => {
+        const div = document.createElement('div');
+        div.className = 'option';
+        
+        let markerContent = '';
+        if(state.isSubmitted) {
+            div.classList.add('disabled');
+            if(q.correct.includes(idx)) {
+                div.classList.add('correct');
+                markerContent = '<i class="fas fa-check"></i>';
+            } else if(state.selected.has(idx)) {
+                div.classList.add('incorrect');
+                markerContent = '<i class="fas fa-times"></i>';
+            }
         } else {
-            el.innerHTML = `<div><div style="width:20px;height:20px;border:2px solid var(--border);border-radius:50%"></div></div><div>${opt}</div>`;
-            el.onclick = () => selectOption(i);
+            if(state.selected.has(idx)) {
+                div.classList.add('selected');
+                markerContent = '<i class="fas fa-check"></i>';
+            }
+            div.onclick = () => selectOption(q.id, idx);
         }
-        list.appendChild(el);
+        
+        div.innerHTML = `<div class="option-marker">${markerContent}</div><div>${txt}</div>`;
+        list.appendChild(div);
     });
     
-    // Update button state
-    const btn = document.getElementById('action-btn');
-    if (ans) {
-        btn.innerText = currentIndex === activeQuestions.length - 1 ? "Завершить" : "Далее";
-        btn.disabled = false;
+    updateButtons();
+    saveState();
+}
+
+function selectOption(qid, idx) {
+    const state = userAnswers[qid];
+    if(state.isSubmitted) return;
+    state.selected.clear();
+    state.selected.add(idx);
+    renderQuestion();
+}
+
+function handleMainClick() {
+    const q = activeQuestions[currentIndex];
+    const state = userAnswers[q.id];
+    if(!state.isSubmitted) {
+        state.isSubmitted = true;
+        const userArr = Array.from(state.selected);
+        state.isCorrect = (userArr.length === 1 && q.correct.includes(userArr[0]));
+        renderQuestion();
     } else {
-        btn.innerText = "Ответить";
-        btn.disabled = true;
+        nextQ();
     }
 }
 
-let tempSelection = null;
-function selectOption(i) {
-    if (userAnswers[activeQuestions[currentIndex].uid]) return;
-    tempSelection = i;
-    
-    const opts = document.querySelectorAll('.option');
-    opts.forEach((o, idx) => {
-        if (idx === i) {
-            o.classList.add('selected');
-            o.querySelector('div:first-child').innerHTML = '<i class="fas fa-check" style="color:var(--accent)"></i>';
-        } else {
-            o.classList.remove('selected');
-            o.querySelector('div:first-child').innerHTML = '<div style="width:20px;height:20px;border:2px solid var(--border);border-radius:50%"></div>';
-        }
-    });
-    document.getElementById('action-btn').disabled = false;
-}
-
-function handleAction() {
-    const q = activeQuestions[currentIndex];
-    if (userAnswers[q.uid]) {
-        nextQ();
-    } else {
-        if (tempSelection === null) return;
-        const isCorrect = q.correct.includes(tempSelection);
-        userAnswers[q.uid] = { selected: tempSelection, isCorrect };
-        saveProgress();
+function prevQ() {
+    if(currentIndex > 0) {
+        currentIndex--;
         renderQuestion();
     }
 }
 
 function nextQ() {
-    if (currentIndex < activeQuestions.length - 1) {
+    if(currentIndex < activeQuestions.length - 1) {
         currentIndex++;
-        tempSelection = null;
         renderQuestion();
     } else {
         finishQuiz();
     }
 }
 
-function prevQ() {
-    if (currentIndex > 0) {
-        currentIndex--;
-        renderQuestion();
+function updateButtons() {
+    const q = activeQuestions[currentIndex];
+    const state = userAnswers[q.id];
+    const mainBtn = document.getElementById('main-btn');
+    document.getElementById('prev-btn').disabled = (currentIndex === 0);
+    document.getElementById('next-btn').disabled = (currentIndex === activeQuestions.length - 1);
+    if(!state.isSubmitted) {
+        mainBtn.textContent = "Ответить";
+        mainBtn.disabled = (state.selected.size === 0);
+        mainBtn.className = 'action-btn';
+    } else {
+        mainBtn.textContent = (currentIndex === activeQuestions.length - 1) ? "Завершить" : "Далее";
+        mainBtn.disabled = false;
+        mainBtn.className = state.isCorrect ? 'action-btn correct' : 'action-btn incorrect';
     }
 }
 
 function finishQuiz() {
     let correct = 0;
     activeQuestions.forEach(q => {
-        if (userAnswers[q.uid] && userAnswers[q.uid].isCorrect) correct++;
+        if(userAnswers[q.id] && userAnswers[q.id].isCorrect) correct++;
     });
-    
-    document.getElementById('final-score').innerText = Math.round(correct / activeQuestions.length * 100) + '%';
-    document.getElementById('res-correct').innerText = correct;
-    document.getElementById('res-error').innerText = activeQuestions.length - correct;
-    
-    showScreen('result');
+    const percent = Math.round(correct / activeQuestions.length * 100);
+    document.getElementById('final-score').textContent = percent + '%';
+    document.getElementById('correct-val').textContent = correct;
+    document.getElementById('error-val').textContent = activeQuestions.length - correct;
+    const title = document.getElementById('result-title');
+    if(percent === 100) title.textContent = "Превосходно!";
+    else if(percent >= 80) title.textContent = "Отлично!";
+    else if(percent >= 50) title.textContent = "Хорошо";
+    else title.textContent = "Надо повторить";
+    if(correct < activeQuestions.length) {
+        document.getElementById('mistakes-btn-end').style.display = 'flex';
+        document.getElementById('mistakes-btn-start').style.display = 'flex';
+    } else {
+        document.getElementById('mistakes-btn-end').style.display = 'none';
+        if(currentMode !== 'mistakes') localStorage.removeItem(storageKey);
+    }
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('result-screen').classList.add('active');
+    document.getElementById('quiz-footer').style.display = 'none';
 }
 
-function saveProgress() {
-    const currentData = JSON.parse(localStorage.getItem(storageKey)) || { answers: {} };
-    // Merge new answers
-    Object.assign(currentData.answers, userAnswers);
-    localStorage.setItem(storageKey, JSON.stringify(currentData));
+function saveState() {
+    const savedAnswers = {};
+    for(let k in userAnswers) {
+        savedAnswers[k] = {...userAnswers[k], selected: Array.from(userAnswers[k].selected)};
+    }
+    const fullData = JSON.parse(localStorage.getItem(storageKey)) || { answers: {} };
+    Object.assign(fullData.answers, savedAnswers);
+    const state = {
+        rawQuestions: activeQuestions,
+        currentIndex: currentIndex,
+        answers: fullData.answers,
+        currentMode: currentMode
+    };
+    localStorage.setItem(storageKey, JSON.stringify(state));
 }
 </script>
 </body>
